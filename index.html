@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Min kalender – måned, uke og syklus</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 900px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+      padding: 16px 16px 20px;
+      display: grid;
+      grid-template-columns: 2fr 1.2fr;
+      gap: 16px;
+    }
+
+    /* Mobil-tilpasning */
+    @media (max-width: 768px) {
+      body {
+        align-items: flex-start;
+      }
+
+      .app {
+        margin: 10px;
+        border-radius: 16px;
+        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+        grid-template-columns: 1fr;
+        padding: 12px;
+        gap: 12px;
+      }
+
+      .calendar-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .calendar-header > div:last-child {
+        width: 100%;
+        align-items: stretch !important;
+      }
+
+      .view-toggle,
+      .nav-buttons {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .calendar-grid {
+        min-height: 260px;
+      }
+
+      .day-cell {
+        height: 54px;
+        padding: 4px;
+      }
+
+      .event-panel {
+        max-height: 55vh;
+        overflow-y: auto;
+      }
+    }
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+
+    .month-label {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: #e5e7eb;
+      transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
+      white-space: nowrap;
+      touch-action: manipulation;
+    }
+
+    button:hover {
+      background: #d1d5db;
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-toggle.active {
+      background: #2563eb;
+      color: white;
+    }
+
+    .calendar-grid {
+      border-radius: 16px;
+      background: #f9fafb;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      font-size: 0.85rem;
+    }
+
+    .day-name {
+      text-align: center;
+      font-weight: 600;
+      color: #6b7280;
+      padding: 4px 0;
+      font-size: 0.75rem;
+    }
+
+    .day-cell {
+      height: 64px;
+      background: white;
+      border-radius: 12px;
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid transparent;
+      transition: border 0.15s, background 0.15s, transform 0.05s, box-shadow 0.15s;
+    }
+
+    .day-cell:hover {
+      border-color: #bfdbfe;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .day-number {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #111827;
+      align-self: flex-start;
+    }
+
+    .day-label-small {
+      font-size: 0.7rem;
+      color: #6b7280;
+    }
+
+    .day-cell.muted {
+      background: #f3f4f6;
+      color: #9ca3af;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .day-cell.muted:hover {
+      border-color: transparent;
+      transform: none;
+    }
+
+    .day-cell.today {
+      border-color: #2563eb;
+    }
+
+    .day-cell.selected {
+      background: #2563eb;
+      color: white;
+      border-color: #1d4ed8;
+    }
+
+    .day-cell.selected .day-number {
+      color: white;
+    }
+
+    .event-dots {
+      display: flex;
+      gap: 3px;
+      align-self: flex-end;
+    }
+
+    .event-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #9ca3af;
+    }
+
+    /* Fargekoder for dotter i kalenderen */
+    .event-dot-default { background: #9ca3af; }   /* grå */
+    .event-dot-jobb { background: #0ea5e9; }      /* blå */
+    .event-dot-skole { background: #a855f7; }     /* lilla */
+    .event-dot-personlig { background: #22c55e; } /* grønn */
+    .event-dot-annet { background: #f97316; }     /* oransje */
+
+    /* Syklus-ikon i dagceller */
+    .cycle-icon {
+      width: 18px;
+      height: 18px;
+      margin-top: 4px;
+    }
+
+    .event-panel {
+      border-radius: 16px;
+      background: #f9fafb;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .reminder-banner {
+      display: none;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      border: 1px solid #fecaca;
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .reminder-strong {
+      font-weight: 600;
+    }
+
+    .event-date-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .event-list {
+      max-height: 210px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .event-item {
+      background: white;
+      border-radius: 12px;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      border: 1px solid #e5e7eb;
+      gap: 8px;
+    }
+
+    .event-item-main {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .event-time {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .event-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* Fargekoder for tags på hendelser */
+    .event-tag-default {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .event-tag-jobb {
+      background: rgba(14, 165, 233, 0.12);
+      color: #0369a1;
+    }
+
+    .event-tag-skole {
+      background: rgba(168, 85, 247, 0.12);
+      color: #6d28d9;
+    }
+
+    .event-tag-personlig {
+      background: rgba(34, 197, 94, 0.12);
+      color: #15803d;
+    }
+
+    .event-tag-annet {
+      background: rgba(249, 115, 22, 0.12);
+      color: #c2410c;
+    }
+
+    .event-empty {
+      font-size: 0.9rem;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    .event-form {
+      margin-top: 2px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .event-form select,
+    .event-form input[type="text"],
+    .event-form input[type="time"] {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 7px 10px;
+      font-size: 0.85rem;
+      outline: none;
+      min-width: 85px;
+    }
+
+    .event-form select {
+      flex: 1;
+      max-width: 120px;
+    }
+
+    .event-form input[type="time"] {
+      flex: 1;
+      max-width: 105px;
+    }
+
+    .event-form input[type="text"] {
+      flex: 2;
+      min-width: 140px;
+    }
+
+    .event-form input:focus,
+    .event-form select:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+    }
+
+    .small-btn {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+
+    /* Sykluspanel i høyre side */
+    .cycle-panel {
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.8rem;
+      color: #374151;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cycle-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .cycle-input-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .cycle-input-row label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cycle-input-row input {
+      width: 60px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    .cycle-input-row input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+    }
+
+    .cycle-buttons {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .cycle-info {
+      color: #6b7280;
+    }
+
+    .cycle-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cycle-legend-icon {
+      width: 16px;
+      height: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div>
+      <div class="calendar-header">
+        <div class="month-label" id="monthLabel"></div>
+
+        <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-end;">
+          <div class="view-toggle">
+            <button id="monthViewBtn" class="btn-toggle active">Måned</button>
+            <button id="weekViewBtn" class="btn-toggle">Uke</button>
+            <button id="cycleViewBtn" class="btn-toggle">Syklus</button>
+          </div>
+          <div class="nav-buttons">
+            <button id="prevBtn">&#8592; Forrige</button>
+            <button id="todayBtn">I dag</button>
+            <button id="nextBtn">Neste &#8594;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- Genereres i JS -->
+      </div>
+    </div>
+
+    <div class="event-panel">
+      <div id="reminderBanner" class="reminder-banner"></div>
+
+      <div class="event-date-title" id="eventDateTitle"></div>
+      <div class="event-list" id="eventList"></div>
+
+      <form class="event-form" id="eventForm">
+        <select id="eventTypeSelect">
+          <option value="default">Kategori</option>
+          <option value="jobb">Jobb</option>
+          <option value="skole">Skole</option>
+          <option value="personlig">Personlig</option>
+          <option value="annet">Annet</option>
+        </select>
+        <input
+          type="time"
+          id="eventTimeInput"
+          placeholder="Tid (valgfritt)"
+        />
+        <input
+          type="text"
+          id="eventInput"
+          placeholder="Ny hendelse (for eksempel 'Møte')"
+          required
+        />
+        <button type="submit" class="btn-primary" id="submitBtn">Legg til</button>
+        <button type="button" class="small-btn" id="cancelEditBtn" style="display:none;">Avbryt</button>
+      </form>
+
+      <!-- Syklus-panel -->
+      <div class="cycle-panel">
+        <div class="cycle-title">Syklus</div>
+        <div class="cycle-input-row">
+          <label>
+            Lengde
+            <input type="number" id="cycleLengthInput" min="15" max="60" />
+            dager
+          </label>
+          <label>
+            Mens
+            <input type="number" id="periodLengthInput" min="1" max="10" />
+            dager
+          </label>
+        </div>
+        <div class="cycle-buttons">
+          <button type="button" class="small-btn" id="setCycleStartBtn">
+            Start på valgt dag
+          </button>
+          <button type="button" class="small-btn" id="clearCycleBtn" style="display:none;">
+            Fjern syklus
+          </button>
+        </div>
+        <div class="cycle-info" id="cycleInfoText"></div>
+        <div class="cycle-legend">
+          <img src="period.png" alt="Mens" class="cycle-legend-icon" /> Mens
+          <img src="fertile.png" alt="Fruktbar periode" class="cycle-legend-icon" /> Fruktbar periode (anslag)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const monthLabel = document.getElementById("monthLabel");
+    const calendarGrid = document.getElementById("calendarGrid");
+    const eventDateTitle = document.getElementById("eventDateTitle");
+    const eventList = document.getElementById("eventList");
+    const eventForm = document.getElementById("eventForm");
+    const eventInput = document.getElementById("eventInput");
+    const eventTimeInput = document.getElementById("eventTimeInput");
+    const eventTypeSelect = document.getElementById("eventTypeSelect");
+    const submitBtn = document.getElementById("submitBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const reminderBanner = document.getElementById("reminderBanner");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const todayBtn = document.getElementById("todayBtn");
+    const monthViewBtn = document.getElementById("monthViewBtn");
+    const weekViewBtn = document.getElementById("weekViewBtn");
+    const cycleViewBtn = document.getElementById("cycleViewBtn");
+
+    // Syklus-elementer
+    const cycleLengthInput = document.getElementById("cycleLengthInput");
+    const periodLengthInput = document.getElementById("periodLengthInput");
+    const cycleInfoText = document.getElementById("cycleInfoText");
+    const setCycleStartBtn = document.getElementById("setCycleStartBtn");
+    const clearCycleBtn = document.getElementById("clearCycleBtn");
+
+    const monthNames = [
+      "januar", "februar", "mars", "april", "mai", "juni",
+      "juli", "august", "september", "oktober", "november", "desember"
+    ];
+
+    const weekdayNames = ["Man", "Tirs", "Ons", "Tors", "Fre", "Lør", "Søn"];
+
+    const eventTypeLabels = {
+      default: "Uten kategori",
+      jobb: "Jobb",
+      skole: "Skole",
+      personlig: "Personlig",
+      annet: "Annet"
+    };
+
+    const today = new Date();
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth();
+    let selectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    let viewMode = "month"; // 'month', 'week', 'cycle'
+
+    // Redigeringstilstand
+    let editingEvent = null; // { dateKey, index }
+
+    // Syklus-innstillinger
+    function defaultCycleSettings() {
+      return {
+        cycleLength: 28,
+        periodLength: 5,
+        lastStartDateKey: null
+      };
+    }
+
+    function loadCycleSettings() {
+      try {
+        const raw = localStorage.getItem("cycleSettings");
+        return raw ? JSON.parse(raw) : defaultCycleSettings();
+      } catch (e) {
+        console.error("Kunne ikke lese syklusdata:", e);
+        return defaultCycleSettings();
+      }
+    }
+
+    function saveCycleSettings(settings) {
+      localStorage.setItem("cycleSettings", JSON.stringify(settings));
+    }
+
+    let cycleSettings = loadCycleSettings();
+
+    function loadEvents() {
+      try {
+        const raw = localStorage.getItem("calendarEvents");
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        console.error("Kunne ikke lese events fra localStorage:", e);
+        return {};
+      }
+    }
+
+    function saveEvents(events) {
+      localStorage.setItem("calendarEvents", JSON.stringify(events));
+    }
+
+    function formatDateKey(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function dateFromKey(key) {
+      if (!key) return null;
+      const parts = key.split("-");
+      if (parts.length !== 3) return null;
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10);
+      const d = parseInt(parts[2], 10);
+      if (!y || !m || !d) return null;
+      return new Date(y, m - 1, d);
+    }
+
+    function formatDateNorwegian(date) {
+      const opts = { year: "numeric", month: "long", day: "numeric" };
+      return new Intl.DateTimeFormat("no-NO", opts).format(date);
+    }
+
+    function resetForm() {
+      editingEvent = null;
+      eventInput.value = "";
+      eventTimeInput.value = "";
+      eventTypeSelect.value = "default";
+      submitBtn.textContent = "Legg til";
+      cancelEditBtn.style.display = "none";
+    }
+
+    function getWeekStart(date) {
+      const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      let day = d.getDay(); // 0=Sun..6=Sat
+      const diff = (day + 6) % 7; // mandag=0
+      d.setDate(d.getDate() - diff);
+      return d;
+    }
+
+    function renderCalendar() {
+      if (viewMode === "month") {
+        renderCalendarMonth();
+      } else if (viewMode === "week") {
+        renderCalendarWeek();
+      } else {
+        renderCalendarCycle();
+      }
+    }
+
+    function addDotsForDate(cell, eventsForDay) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "event-dots";
+
+      const seenTypes = new Set();
+      for (const ev of eventsForDay) {
+        const typeKey = ev.type || "default";
+        if (seenTypes.has(typeKey)) continue;
+        seenTypes.add(typeKey);
+
+        const dot = document.createElement("div");
+        dot.className = `event-dot event-dot-${typeKey}`;
+        wrapper.appendChild(dot);
+
+        if (seenTypes.size >= 3) break; // maks 3 dotter per dag
+      }
+
+      if (seenTypes.size > 0) {
+        cell.appendChild(wrapper);
+      }
+    }
+
+    // Bruker ikoner i stedet for fargestreker
+    function renderCycleIndicator(cell, dateObj) {
+      if (!cycleSettings || !cycleSettings.lastStartDateKey) return;
+
+      const startDate = dateFromKey(cycleSettings.lastStartDateKey);
+      if (!startDate) return;
+
+      const oneDayMs = 24 * 60 * 60 * 1000;
+      const diff = Math.floor((dateObj - startDate) / oneDayMs);
+      if (diff < 0) return; // før første registrerte start
+
+      const cycleLen = cycleSettings.cycleLength || 28;
+      const periodLen = cycleSettings.periodLength || 5;
+      if (cycleLen <= 0) return;
+
+      const phase = diff % cycleLen;
+
+      const ovulationDay = Math.round(cycleLen - 14); // grovt anslag
+      const fertileStart = ovulationDay - 3;
+      const fertileEnd = ovulationDay + 1;
+
+      let iconSrc = null;
+
+      // Mensen
+      if (phase < periodLen) {
+        iconSrc = "period.png"; // dråpe
+      }
+      // Fruktbar periode
+      else if (phase >= fertileStart && phase <= fertileEnd) {
+        iconSrc = "fertile.png"; // blomst
+      }
+
+      if (!iconSrc) return;
+
+      const img = document.createElement("img");
+      img.src = iconSrc;
+      img.className = "cycle-icon";
+      img.alt = "";
+
+      cell.appendChild(img);
+    }
+
+    function renderCalendarMonth() {
+      calendarGrid.innerHTML = "";
+
+      weekdayNames.forEach((name) => {
+        const div = document.createElement("div");
+        div.className = "day-name";
+        div.textContent = name;
+        calendarGrid.appendChild(div);
+      });
+
+      monthLabel.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      const daysInMonth = lastDay.getDate();
+
+      let startDay = firstDay.getDay();
+      startDay = (startDay + 6) % 7; // mandag først
+
+      const events = loadEvents();
+
+      for (let i = 0; i < startDay; i++) {
+        const cell = document.createElement("div");
+        cell.className = "day-cell muted";
+        calendarGrid.appendChild(cell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "day-cell";
+
+        const dateObj = new Date(currentYear, currentMonth, day);
+        const dateKey = formatDateKey(dateObj);
+
+        const numberDiv = document.createElement("div");
+        numberDiv.className = "day-number";
+        numberDiv.textContent = day;
+        cell.appendChild(numberDiv);
+
+        if (dateKey === formatDateKey(today)) {
+          cell.classList.add("today");
+        }
+
+        if (dateKey === formatDateKey(selectedDate)) {
+          cell.classList.add("selected");
+        }
+
+        if (events[dateKey] && events[dateKey].length > 0) {
+          addDotsForDate(cell, events[dateKey]);
+        }
+
+        // Syklus-ikon
+        renderCycleIndicator(cell, dateObj);
+
+        cell.addEventListener("click", () => {
+          selectedDate = dateObj;
+          currentYear = selectedDate.getFullYear();
+          currentMonth = selectedDate.getMonth();
+          resetForm();
+          renderCalendar();
+          renderEventPanel();
+          updateReminders();
+        });
+
+        calendarGrid.appendChild(cell);
+      }
+    }
+
+    function renderCalendarWeek() {
+      calendarGrid.innerHTML = "";
+
+      const weekStart = getWeekStart(selectedDate);
+      const weekEnd = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6);
+
+      const label = `${weekStart.getDate()}. ${monthNames[weekStart.getMonth()]} – ${weekEnd.getDate()}. ${monthNames[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
+      monthLabel.textContent = label;
+
+      const events = loadEvents();
+
+      weekdayNames.forEach((name, index) => {
+        const div = document.createElement("div");
+        div.className = "day-name";
+
+        const dateObj = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + index);
+        const dayNum = dateObj.getDate();
+
+        div.innerHTML = `<div>${name}</div><div class="day-label-small">${dayNum}.</div>`;
+        calendarGrid.appendChild(div);
+      });
+
+      for (let i = 0; i < 7; i++) {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "day-cell";
+
+        const dateObj = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i);
+        const dateKey = formatDateKey(dateObj);
+
+        const numberDiv = document.createElement("div");
+        numberDiv.className = "day-number";
+        numberDiv.textContent = dateObj.getDate();
+        cell.appendChild(numberDiv);
+
+        if (dateKey === formatDateKey(today)) {
+          cell.classList.add("today");
+        }
+
+        if (dateKey === formatDateKey(selectedDate)) {
+          cell.classList.add("selected");
+        }
+
+        if (events[dateKey] && events[dateKey].length > 0) {
+          addDotsForDate(cell, events[dateKey]);
+        }
+
+        // Syklus-ikon
+        renderCycleIndicator(cell, dateObj);
+
+        cell.addEventListener("click", () => {
+          selectedDate = dateObj;
+          currentYear = selectedDate.getFullYear();
+          currentMonth = selectedDate.getMonth();
+          resetForm();
+          renderCalendar();
+          renderEventPanel();
+          updateReminders();
+        });
+
+        calendarGrid.appendChild(cell);
+      }
+    }
+
+    // Syklus-visning: samme som måned, men fokus på syklus
+    function renderCalendarCycle() {
+      calendarGrid.innerHTML = "";
+
+      weekdayNames.forEach((name) => {
+        const div = document.createElement("div");
+        div.className = "day-name";
+        div.textContent = name;
+        calendarGrid.appendChild(div);
+      });
+
+      monthLabel.textContent = `Syklus – ${monthNames[currentMonth]} ${currentYear}`;
+
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      const daysInMonth = lastDay.getDate();
+
+      let startDay = firstDay.getDay();
+      startDay = (startDay + 6) % 7; // mandag først
+
+      for (let i = 0; i < startDay; i++) {
+        const cell = document.createElement("div");
+        cell.className = "day-cell muted";
+        calendarGrid.appendChild(cell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "day-cell";
+
+        const dateObj = new Date(currentYear, currentMonth, day);
+        const dateKey = formatDateKey(dateObj);
+
+        const numberDiv = document.createElement("div");
+        numberDiv.className = "day-number";
+        numberDiv.textContent = day;
+        cell.appendChild(numberDiv);
+
+        if (dateKey === formatDateKey(today)) {
+          cell.classList.add("today");
+        }
+
+        if (dateKey === formatDateKey(selectedDate)) {
+          cell.classList.add("selected");
+        }
+
+        // Kun syklus-ikoner
+        renderCycleIndicator(cell, dateObj);
+
+        cell.addEventListener("click", () => {
+          selectedDate = dateObj;
+          currentYear = selectedDate.getFullYear();
+          currentMonth = selectedDate.getMonth();
+          resetForm();
+          renderCalendar();
+          renderEventPanel();
+          updateReminders();
+        });
+
+        calendarGrid.appendChild(cell);
+      }
+    }
+
+    function renderEventPanel() {
+      const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+      const formatter = new Intl.DateTimeFormat("no-NO", options);
+
+      eventDateTitle.textContent = formatter.format(selectedDate);
+
+      const events = loadEvents();
+      const dateKey = formatDateKey(selectedDate);
+      const list = (events[dateKey] || []).slice().sort((a, b) => {
+        const ta = a.time || "";
+        const tb = b.time || "";
+        return ta.localeCompare(tb);
+      });
+
+      eventList.innerHTML = "";
+
+      if (list.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "event-empty";
+        empty.textContent = "Ingen hendelser denne dagen ennå.";
+        eventList.appendChild(empty);
+        return;
+      }
+
+      list.forEach((ev, index) => {
+        const item = document.createElement("div");
+        item.className = "event-item";
+
+        const main = document.createElement("div");
+        main.className = "event-item-main";
+
+        if (ev.time) {
+          const timeDiv = document.createElement("div");
+          timeDiv.className = "event-time";
+          timeDiv.textContent = ev.time;
+          main.appendChild(timeDiv);
+        }
+
+        const textSpan = document.createElement("div");
+        textSpan.textContent = ev.text;
+        main.appendChild(textSpan);
+
+        const tag = document.createElement("div");
+        const typeKey = ev.type || "default";
+        tag.className = `event-tag event-tag-${typeKey}`;
+        tag.textContent = eventTypeLabels[typeKey] || eventTypeLabels.default;
+        main.appendChild(tag);
+
+        const btnBox = document.createElement("div");
+        btnBox.style.display = "flex";
+        btnBox.style.flexDirection = "column";
+        btnBox.style.gap = "4px";
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Rediger";
+        editBtn.className = "small-btn";
+        editBtn.addEventListener("click", () => {
+          const currentType = ev.type || "default";
+          editingEvent = { dateKey, index };
+          eventInput.value = ev.text;
+          eventTimeInput.value = ev.time || "";
+          eventTypeSelect.value = currentType;
+          submitBtn.textContent = "Oppdater";
+          cancelEditBtn.style.display = "inline-flex";
+          eventInput.focus();
+        });
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Slett";
+        deleteBtn.className = "small-btn";
+        deleteBtn.addEventListener("click", () => {
+          const eventsNow = loadEvents();
+          const arr = eventsNow[dateKey] || [];
+          arr.splice(index, 1);
+          if (arr.length === 0) {
+            delete eventsNow[dateKey];
+          } else {
+            eventsNow[dateKey] = arr;
+          }
+          saveEvents(eventsNow);
+          if (editingEvent && editingEvent.dateKey === dateKey && editingEvent.index === index) {
+            resetForm();
+          }
+          renderCalendar();
+          renderEventPanel();
+          updateReminders();
+        });
+
+        btnBox.appendChild(editBtn);
+        btnBox.appendChild(deleteBtn);
+
+        item.appendChild(main);
+        item.appendChild(btnBox);
+        eventList.appendChild(item);
+      });
+    }
+
+    // Påminnelse: beregn neste forventede mens
+    function updateReminders() {
+      if (!cycleSettings || !cycleSettings.lastStartDateKey) {
+        reminderBanner.style.display = "none";
+        reminderBanner.textContent = "";
+        return;
+      }
+
+      const startDate = dateFromKey(cycleSettings.lastStartDateKey);
+      if (!startDate) {
+        reminderBanner.style.display = "none";
+        reminderBanner.textContent = "";
+        return;
+      }
+
+      const cycleLen = cycleSettings.cycleLength || 28;
+      if (cycleLen <= 0) {
+        reminderBanner.style.display = "none";
+        reminderBanner.textContent = "";
+        return;
+      }
+
+      const todayDate = new Date();
+      const todayMidnight = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
+
+      let nextStart = new Date(startDate.getTime());
+      const oneDayMs = 24 * 60 * 60 * 1000;
+
+      // Flytt fremover til neste start som er i dag eller fremover
+      while (nextStart < todayMidnight) {
+        nextStart = new Date(nextStart.getTime() + cycleLen * oneDayMs);
+      }
+
+      const diffDays = Math.round((nextStart - todayMidnight) / oneDayMs);
+
+      if (diffDays < 0) {
+        reminderBanner.style.display = "none";
+        reminderBanner.textContent = "";
+        return;
+      }
+
+      const dateText = formatDateNorwegian(nextStart);
+      let message = "";
+
+      if (diffDays === 0) {
+        message = `Mensen er forventet i dag (${dateText}).`;
+      } else if (diffDays === 1) {
+        message = `Mensen er forventet i morgen (${dateText}).`;
+      } else {
+        message = `Neste forventede mens: ${dateText} (om ${diffDays} dager).`;
+      }
+
+      if (diffDays <= 3) {
+        reminderBanner.innerHTML = `<span class="reminder-strong">Påminnelse:</span> ${message}`;
+      } else {
+        reminderBanner.textContent = message;
+      }
+      reminderBanner.style.display = "block";
+    }
+
+    function updateCycleUI() {
+      cycleLengthInput.value = cycleSettings.cycleLength;
+      periodLengthInput.value = cycleSettings.periodLength;
+
+      if (cycleSettings.lastStartDateKey) {
+        cycleInfoText.textContent = `Startdag: ${cycleSettings.lastStartDateKey} • aktiv`;
+        clearCycleBtn.style.display = "inline-flex";
+      } else {
+        cycleInfoText.textContent = "Ingen syklus markert ennå.";
+        clearCycleBtn.style.display = "none";
+      }
+
+      updateReminders();
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (viewMode === "month" || viewMode === "cycle") {
+        currentMonth--;
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        renderCalendar();
+      } else {
+        selectedDate = new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          selectedDate.getDate() - 7
+        );
+        currentYear = selectedDate.getFullYear();
+        currentMonth = selectedDate.getMonth();
+        renderCalendar();
+      }
+      resetForm();
+      renderEventPanel();
+      updateReminders();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (viewMode === "month" || viewMode === "cycle") {
+        currentMonth++;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        renderCalendar();
+      } else {
+        selectedDate = new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          selectedDate.getDate() + 7
+        );
+        currentYear = selectedDate.getFullYear();
+        currentMonth = selectedDate.getMonth();
+        renderCalendar();
+      }
+      resetForm();
+      renderEventPanel();
+      updateReminders();
+    });
+
+    todayBtn.addEventListener("click", () => {
+      currentYear = today.getFullYear();
+      currentMonth = today.getMonth();
+      selectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      resetForm();
+      renderCalendar();
+      renderEventPanel();
+      updateReminders();
+    });
+
+    monthViewBtn.addEventListener("click", () => {
+      viewMode = "month";
+      monthViewBtn.classList.add("active");
+      weekViewBtn.classList.remove("active");
+      cycleViewBtn.classList.remove("active");
+      currentYear = selectedDate.getFullYear();
+      currentMonth = selectedDate.getMonth();
+      renderCalendar();
+    });
+
+    weekViewBtn.addEventListener("click", () => {
+      viewMode = "week";
+      weekViewBtn.classList.add("active");
+      monthViewBtn.classList.remove("active");
+      cycleViewBtn.classList.remove("active");
+      renderCalendar();
+    });
+
+    cycleViewBtn.addEventListener("click", () => {
+      viewMode = "cycle";
+      cycleViewBtn.classList.add("active");
+      monthViewBtn.classList.remove("active");
+      weekViewBtn.classList.remove("active");
+      currentYear = selectedDate.getFullYear();
+      currentMonth = selectedDate.getMonth();
+      renderCalendar();
+    });
+
+    eventForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = eventInput.value.trim();
+      const time = eventTimeInput.value.trim();
+      const type = eventTypeSelect.value || "default";
+
+      if (!text) return;
+
+      const events = loadEvents();
+      const dateKey = formatDateKey(selectedDate);
+      if (!events[dateKey]) events[dateKey] = [];
+
+      const payload = { text, time: time || null, type: type || "default" };
+
+      if (editingEvent && editingEvent.dateKey === dateKey) {
+        events[dateKey][editingEvent.index] = payload;
+      } else if (editingEvent && editingEvent.dateKey !== dateKey) {
+        const oldArr = events[editingEvent.dateKey] || [];
+        oldArr.splice(editingEvent.index, 1);
+        events[editingEvent.dateKey] = oldArr;
+        events[dateKey].push(payload);
+      } else {
+        events[dateKey].push(payload);
+      }
+
+      saveEvents(events);
+      resetForm();
+      renderCalendar();
+      renderEventPanel();
+      updateReminders();
+    });
+
+    cancelEditBtn.addEventListener("click", () => {
+      resetForm();
+    });
+
+    // Syklus-handlere
+    cycleLengthInput.addEventListener("change", () => {
+      let val = parseInt(cycleLengthInput.value, 10);
+      if (isNaN(val)) val = 28;
+      val = Math.max(15, Math.min(60, val));
+      cycleSettings.cycleLength = val;
+      saveCycleSettings(cycleSettings);
+      updateCycleUI();
+      renderCalendar();
+    });
+
+    periodLengthInput.addEventListener("change", () => {
+      let val = parseInt(periodLengthInput.value, 10);
+      if (isNaN(val)) val = 5;
+      val = Math.max(1, Math.min(10, val));
+      cycleSettings.periodLength = val;
+      saveCycleSettings(cycleSettings);
+      updateCycleUI();
+      renderCalendar();
+    });
+
+    setCycleStartBtn.addEventListener("click", () => {
+      const key = formatDateKey(selectedDate);
+      cycleSettings.lastStartDateKey = key;
+      saveCycleSettings(cycleSettings);
+      updateCycleUI();
+      renderCalendar();
+    });
+
+    clearCycleBtn.addEventListener("click", () => {
+      cycleSettings.lastStartDateKey = null;
+      saveCycleSettings(cycleSettings);
+      updateCycleUI();
+      renderCalendar();
+    });
+
+    // Init
+    updateCycleUI();
+    renderCalendar();
+    renderEventPanel();
+  </script>
+</body>
+</html>
