@@ -249,9 +249,12 @@
       right: 4px;    /* ★ høyre kant */
       margin: 0;
     
-  filter: brightness(1.1) contrast(1.3) saturate(1.15)
-          drop-shadow(0px 2px 2px rgba(0,0,0,0.4))
-          drop-shadow(0px 4px 8px rgba(0,0,0,0.25));
+  /* gjør ikonene litt klarere */
+  filter: brightness(1.08) contrast(1.2) saturate(1.15)
+          
+          /* 3D-effekt med to skygger */
+          drop-shadow(0px 1px 2px rgba(0,0,0,0.28))   /* skarp liten skygge */
+          drop-shadow(0px 3px 5px rgba(0,0,0,0.18)); /* myk bred skygge */
     }
 
     .event-panel {
