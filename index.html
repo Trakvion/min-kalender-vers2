@@ -162,7 +162,7 @@
       font-size: 0.75rem;
     }
 
-    .day-cell {
+.day-cell {
       height: 64px;
       background: white;
       border-radius: 12px;
@@ -173,6 +173,7 @@
       justify-content: space-between;
       border: 1px solid transparent;
       transition: border 0.15s, background 0.15s, transform 0.05s, box-shadow 0.15s;
+      position: relative; /* ★ legg til dette */
     }
 
     .day-cell:hover {
@@ -240,10 +241,13 @@
     .event-dot-annet { background: #f97316; }     /* oransje */
 
     /* Syklus-ikon i dagceller */
-    .cycle-icon {
+.cycle-icon {
       width: 18px;
       height: 18px;
-      margin-top: 4px;
+      position: absolute;
+      bottom: 4px;   /* ★ nedre kant */
+      right: 4px;    /* ★ høyre kant */
+      margin: 0;
     }
 
     .event-panel {
