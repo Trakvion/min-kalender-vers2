@@ -4,17 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>Min kalender – måned, uke og syklus</title>
- 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600&display=swap" rel="stylesheet">
 
+  <!-- Montserrat Thin + flere vekter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- HER MÅ STYLE-TAGGEN VÆRE -->
+  <style>
     * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 100;   /* SUPER-tynn */
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 100;   /* super-tynn som utgangspunkt */
     }
 
     body {
@@ -93,10 +96,10 @@
     }
 
     .month-label {
-       font-size: 1.6rem;
-  font-weight: 300;              /* Kapakana er ganske dekorativ, så lett vekt er fint */
-  font-family: "Kapakana", cursive;
-  letter-spacing: 0.12em;        /* litt luft mellom bokstavene */
+      font-size: 1.6rem;
+      font-weight: 300;       /* litt tykkere enn resten */
+      letter-spacing: 0.12em; /* litt luft mellom bokstavene */
+      text-transform: lowercase;
     }
 
     .nav-buttons {
@@ -125,6 +128,7 @@
       transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
       white-space: nowrap;
       touch-action: manipulation;
+      font-weight: 400; /* knapper litt tydeligere */
     }
 
     button:hover {
@@ -162,13 +166,13 @@
 
     .day-name {
       text-align: center;
-      font-weight: 600;
+      font-weight: 300;
       color: #6b7280;
       padding: 4px 0;
       font-size: 0.75rem;
     }
 
-.day-cell {
+    .day-cell {
       height: 64px;
       background: white;
       border-radius: 12px;
@@ -179,7 +183,7 @@
       justify-content: space-between;
       border: 1px solid transparent;
       transition: border 0.15s, background 0.15s, transform 0.05s, box-shadow 0.15s;
-      position: relative; /* ★ legg til dette */
+      position: relative;
     }
 
     .day-cell:hover {
@@ -190,7 +194,7 @@
 
     .day-number {
       font-size: 0.9rem;
-      font-weight: 500;
+      font-weight: 300;
       color: #111827;
       align-self: flex-start;
     }
@@ -247,17 +251,14 @@
     .event-dot-annet { background: #f97316; }     /* oransje */
 
     /* Syklus-ikon i dagceller */
-.cycle-icon {
+    .cycle-icon {
       width: 18px;
       height: 18px;
       position: absolute;
-      bottom: 4px;   /* ★ nedre kant */
-      right: 4px;    /* ★ høyre kant */
+      bottom: 4px;
+      right: 4px;
       margin: 0;
-    
-  /* gjør ikonene litt klarere */
-  filter: brightness(1.08) contrast(1.2) saturate(1.15)
-          
+      filter: brightness(1.08) contrast(1.2) saturate(1.15);
     }
 
     .event-panel {
@@ -285,7 +286,7 @@
 
     .event-date-title {
       font-size: 1.05rem;
-      font-weight: 600;
+      font-weight: 400;
       color: #111827;
     }
 
@@ -307,6 +308,7 @@
       font-size: 0.9rem;
       border: 1px solid #e5e7eb;
       gap: 8px;
+      font-weight: 300;
     }
 
     .event-item-main {
@@ -330,7 +332,6 @@
       font-weight: 500;
     }
 
-    /* Fargekoder for tags på hendelser */
     .event-tag-default {
       background: #e5e7eb;
       color: #374151;
@@ -406,7 +407,6 @@
       font-size: 0.8rem;
     }
 
-    /* Sykluspanel i høyre side */
     .cycle-panel {
       margin-top: 6px;
       padding-top: 6px;
@@ -474,6 +474,10 @@
   </style>
 </head>
 <body>
+  <!-- resten av HTML + JS-en din (som du allerede har) -->
+  <!-- Jeg har ikke rørt script-delen – den du limte inn fungerer videre. -->
+  <!-- Bare behold resten slik du hadde, under denne linjen. -->
+
   <div class="app">
     <div>
       <div class="calendar-header">
