@@ -95,11 +95,12 @@
       gap: 12px;
     }
 
-    .month-label {
-      font-size: 1.6rem;
-      font-weight: 300;       /* litt tykkere enn resten */
-      letter-spacing: 0.12em; /* litt luft mellom bokstavene */
-      text-transform: capitalize;
+  .month-label {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+  text-transform: capitalize;
     }
 
     .nav-buttons {
@@ -782,7 +783,8 @@
         calendarGrid.appendChild(div);
       });
 
-      monthLabel.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+      const monthTitle = `${monthNames[currentMonth]} ${currentYear}`;
+      monthLabel.textContent = monthTitle.charAt(0).toUpperCase() + monthTitle.slice(1);
 
       const firstDay = new Date(currentYear, currentMonth, 1);
       const lastDay = new Date(currentYear, currentMonth + 1, 0);
@@ -916,7 +918,8 @@
         calendarGrid.appendChild(div);
       });
 
-      monthLabel.textContent = `Syklus – ${monthNames[currentMonth]} ${currentYear}`;
+      const cycleTitle = `Syklus – ${monthNames[currentMonth]} ${currentYear}`;
+      monthLabel.textContent = cycleTitle.charAt(0).toUpperCase() + cycleTitle.slice(1);
 
       const firstDay = new Date(currentYear, currentMonth, 1);
       const lastDay = new Date(currentYear, currentMonth + 1, 0);
@@ -973,7 +976,9 @@
       const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
       const formatter = new Intl.DateTimeFormat("no-NO", options);
 
-      eventDateTitle.textContent = formatter.format(selectedDate);
+       // Gjør første bokstav stor
+  const formatted = formatter.format(selectedDate);
+  eventDateTitle.textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
 
       const events = loadEvents();
       const dateKey = formatDateKey(selectedDate);
