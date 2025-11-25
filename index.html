@@ -173,25 +173,46 @@
       font-size: 0.75rem;
     }
 
-    .day-cell {
-      height: 64px;
-      background: white;
-      border-radius: 12px;
-      padding: 6px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid transparent;
-      transition: border 0.15s, background 0.15s, transform 0.05s, box-shadow 0.15s;
-      position: relative;
-    }
+.day-cell {
+  height: 64px;
+  background: white;
+  border-radius: 12px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid transparent;
+  transition: border 0.15s, background 0.15s, transform 0.05s, box-shadow 0.15s;
+  position: relative;
+}
 
-    .day-cell:hover {
-      border-color: #d0d0d0;
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.15);
-      transform: translateY(-1px);
-    }
+/* 👇 Overstyrer blå fokuslinje og setter en myk pastell-outline */
+.day-cell:focus,
+.day-cell:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #d6c2db;   /* myk lilla-grå */
+  border-radius: 12px;
+}
+
+/* Hover-effekt */
+.day-cell:hover {
+  border-color: #d0d0d0;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.15);
+  transform: translateY(-1px);
+}
+
+/* 👇 Valgt dag – lysere bakgrunn og samme outline som fokus */
+.day-cell.selected {
+  background: #e8e4ef;            /* lys lilla-grå – juster hvis du vil lysere */
+  color: #111827;
+  border-color: #d6c2db;
+  box-shadow: 0 0 0 2px #d6c2db;
+}
+
+.day-cell.selected .day-number {
+  color: #111827;
+}
 
     .day-number {
       font-size: 0.9rem;
