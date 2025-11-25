@@ -252,14 +252,15 @@
     .event-dot-annet { background: #f97316; }     /* oransje */
 
     /* Syklus-ikon i dagceller */
-    .cycle-icon {
-      width: 18px;
-      height: 18px;
-      position: absolute;
-      bottom: 4px;
-      right: 4px;
-      margin: 0;
-      filter: brightness(1.08) contrast(1.2) saturate(1.15);
+   .cycle-icon {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 4px;          /* ← lå tidligere på bottom */
+    right: 4px;        /* høyre hjørne */
+    margin: 0;
+
+    filter: brightness(1.08) contrast(1.2) saturate(1.15)
     }
 
     .event-panel {
