@@ -4,15 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>Min kalender – måned, uke og syklus</title>
-   <link rel="preconnect" href="https://fonts.googleapis.com">
+ 
+  <!-- Roboto (hovedfont) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Kapakana (kun til månedsnavn) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@300..400&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Raleway", sans-serif;
+      font-family: "Roboto", sans-serif;
     }
 
     body {
@@ -91,9 +98,10 @@
     }
 
     .month-label {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #111827;
+       font-size: 1.6rem;
+  font-weight: 300;              /* Kapakana er ganske dekorativ, så lett vekt er fint */
+  font-family: "Kapakana", cursive;
+  letter-spacing: 0.12em;        /* litt luft mellom bokstavene */
     }
 
     .nav-buttons {
