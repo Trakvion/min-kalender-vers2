@@ -711,24 +711,25 @@
     }
 
     function addDotsForDate(cell, eventsForDay) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "event-dots";
+  const wrapper = document.createElement("div");
+  wrapper.className = "event-dots";
 
-      const seenTypes = new Set();
-      for (const ev of eventsForDay) {
-        const typeKey = ev.type || "default";
-        if (seenTypes.has(typeKey)) continue;
-        seenTypes.add(typeKey);
+  const seenTypes = new Set();
+  for (const ev of eventsForDay) {
+    const typeKey = ev.type || "default";
 
-        const dot = document.createElement("div");
-        dot.className = `event-dot event-dot-${typeKey}`;
-        wrapper.appendChild(dot);
+    if (seenTypes.has(typeKey)) continue;
+    seenTypes.add(typeKey);
 
-        if (seenTypes.size >= 4) break; // maks 3 dotter per dag
-      }
+    const dot = document.createElement("div");
+    dot.className = `event-dot event-dot-${typeKey}`;
+    wrapper.appendChild(dot);
 
-      if (seenTypes.size > 0) {
-        cell.appendChild(wrapper);
+    if (seenTypes.size >= 4) break; // nå vises opptil 4 dotter
+  }
+
+  if (seenTypes.size > 0) {
+    cell.appendChild(wrapper);
       }
     }
 
