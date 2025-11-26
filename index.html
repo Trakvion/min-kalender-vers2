@@ -39,23 +39,28 @@
       gap: 16px;
     }
 
-/* Mobil-tilpasning */
+/* ================================
+   MOBIL-OPTIMALISERING (≤ 768px)
+   ================================ */
 @media (max-width: 768px) {
 
+  /* 1. Layout & kropp */
   body {
     align-items: flex-start;
-    padding: 0;
+    background: #f3f4f6;
   }
 
   .app {
     margin: 10px;
-    border-radius: 14px;
-    padding: 14px;
-    grid-template-columns: 1fr; /* ENKELT SPOR – kalender over, panel under */
-    gap: 18px;
+    max-width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+    grid-template-columns: 1fr;         /* én kolonne: kalender over, panel under */
+    padding: 14px 12px 16px;
+    gap: 14px;
   }
 
-  /* --- Header og knapper --- */
+  /* 2. Toppområde / header */
   .calendar-header {
     flex-direction: column;
     align-items: flex-start;
@@ -63,97 +68,139 @@
   }
 
   .month-label {
-    font-size: 1.6rem;
-    margin-bottom: 4px;
+    font-size: 1.7rem;
+    text-align: left;
+    width: 100%;
   }
 
-  /* Knapper større og mer touch-vennlige */
-  button,
-  .btn-toggle {
-    padding: 10px 16px !important;
-    font-size: 1rem;
-    border-radius: 14px;
+  .calendar-header > div:last-child {
+    width: 100%;
+    align-items: stretch !important;
   }
 
+  /* 3. Visningsknapper (Måned / Uke / Syklus) */
   .view-toggle {
     width: 100%;
     justify-content: space-between;
-    flex-wrap: nowrap;
-  }
-
-  .nav-buttons {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  /* --- Kalender-grid --- */
-  .calendar-grid {
-    min-height: auto;
-    padding: 8px;
     gap: 6px;
   }
 
-  .day-cell {
-    height: 58px;
-    padding: 5px;
-  }
-
-  .day-name {
-    font-size: 0.70rem;
-  }
-
-  .day-number {
-    font-size: 0.85rem;
-  }
-
-  /* Flytt syklus-ikonet litt ned for små skjermer */
-  .cycle-icon {
-    width: 16px;
-    height: 16px;
-    top: 6px;
-    right: 6px;
-  }
-
-  /* --- Event-panelet under kalender --- */
-  .event-panel {
-    padding: 10px;
-    border-radius: 14px;
-    background: #f8f9fb;
-  }
-
-  .event-date-title {
+  .view-toggle button {
+    flex: 1;
+    padding: 10px 0;
     font-size: 1rem;
   }
 
-  /* Inputfelt større */
-  .event-form select,
-  .event-form input[type="text"],
-  .event-form input[type="time"] {
-    padding: 10px 12px;
-    border-radius: 14px;
+  /* 4. Navigasjonsknapper (Forrige / I dag / Neste) */
+  .nav-buttons {
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .nav-buttons button {
+    flex: 1;
+    padding: 9px 0;
     font-size: 0.95rem;
   }
 
-  .event-item {
-    padding: 10px;
-    border-radius: 12px;
-    font-size: 0.95rem;
+  /* 5. Kalender-grid & dagceller */
+  .calendar-grid {
+    padding: 6px;
+    gap: 4px;
   }
 
-  .cycle-input-row input {
-    padding: 6px 10px;
-    font-size: 0.9rem;
+  .day-name {
+    font-size: 0.75rem;
+    padding: 2px 0;
   }
 
-  /* Øk spacing */
-  .cycle-panel {
+  .day-cell {
+    height: 70px;
+    padding: 6px;
+  }
+
+  .day-number {
+    font-size: 1rem;
+  }
+
+  /* Syklus-ikon litt mindre på mobil */
+  .cycle-icon {
+    width: 16px;
+    height: 16px;
+    top: 4px;
+    right: 4px;
+  }
+
+  /* 6. Event-panel (høyre side på desktop, under på mobil) */
+  .event-panel {
+    padding: 12px 10px 14px;
     gap: 10px;
   }
 
-  .event-dots {
-    gap: 4px;
+  .event-date-title {
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+
+  .event-list {
+    max-height: 220px;
+    gap: 8px;
+  }
+
+  .event-item {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+
+  .event-time {
+    font-size: 0.8rem;
+  }
+
+  /* 7. Skjema for hendelser */
+  .event-form {
+    margin-top: 4px;
+    gap: 6px;
+  }
+
+  .event-form select,
+  .event-form input[type="time"],
+  .event-form input[type="text"] {
+    font-size: 0.9rem;
+    padding: 7px 10px;
+  }
+
+  .event-form input[type="text"] {
+    flex-basis: 100%;
+  }
+
+  /* 8. Syklus-panel */
+  .cycle-panel {
+    margin-top: 6px;
+    padding-top: 8px;
+    gap: 8px;
+  }
+
+  .cycle-input-row {
+    gap: 8px;
+  }
+
+  .cycle-input-row input {
+    width: 70px;
+    font-size: 0.85rem;
+  }
+
+  .cycle-buttons {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .cycle-buttons .small-btn {
+    flex: 1;
+    justify-content: center;
   }
 }
+
 
       .app {
         margin: 10px;
