@@ -204,31 +204,38 @@
 
 /* Valgt dag – stabil, lik farge hver gang */
 .day-cell.selected {
-  background: #f2eef8 !important;         /* lys lilla */
-  color: #4b3862 !important;              /* mørkere lilla tekst */
-  border: 2px solid #d6c2db !important;   /* matchende outline */
+  background: #f2eef8 !important;       /* lys lilla */
+  border: 2px solid #d6c2db !important; /* outline */
   box-shadow: 0 0 0 2px #f2eef8 !important;
+  color: inherit !important;            /* ← riktig! */
 }
-    /* Hindre at 'i dag' overstyrer valgt dag */
+
+/* Hindre at 'i dag' overstyrer valgt dag */
 .day-cell.today.selected {
   background: #f2eef8 !important;
   border: 2px solid #d6c2db !important;
   box-shadow: 0 0 0 2px #f2eef8 !important;
-  color: #4b3862 !important;
+  color: inherit !important;
 }
+
+/* 'i dag' når den ikke er valgt */
 .day-cell.today {
   border-color: #e4e4e7;
   background: #fafafa;
 }
+
+/* Dato-nummer – alltid svart */
 .day-cell.selected .day-number {
-  color: #111827;
+  color: #111827 !important;
 }
-    .day-number {
-      font-size: 0.9rem;
-      font-weight: 300;
-      color: #111827;
-      align-self: flex-start;
-    }
+
+/* Standard dag-nummer */
+.day-number {
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: #111827;
+  align-self: flex-start;
+}
 
     .day-label-small {
       font-size: 0.7rem;
