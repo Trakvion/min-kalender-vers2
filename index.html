@@ -114,31 +114,51 @@
       flex-wrap: wrap;
     }
 
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      background: #e5e7eb;
-      transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
-      white-space: nowrap;
-      touch-action: manipulation;
-      font-weight: 400; /* knapper litt tydeligere */
-    }
+button {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: #e5e7eb;
+  white-space: nowrap;
+  touch-action: manipulation;
+  font-weight: 400;
 
-    button:hover {
-      background: #bbbbbb;
-    }
+  /* SMOOTH OVERGANGER */
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.12s cubic-bezier(0.15, 0.85, 0.35, 1);
+}
 
-    button:active {
-      transform: translateY(1px);
-      box-shadow: none;
-    }
+button:hover {
+  background: #dcdcdc; /* mykere lys grå */
+  box-shadow: 0 4px 11px rgba(0,0,0,0.1);
+}
+
+  /* I DAG-knappen: helt nøytral og myk */
+#todayBtn {
+  background: #f5f5f7;
+  color: #333;
+  border: 1px solid #e5e5e7;
+}
+
+#todayBtn:hover {
+  background: #ececef;
+  color: #111;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+}
+    
+button:active {
+  transform: scale(0.96); /* myk nedtrykk */
+}
 
     .btn-primary {
       background: #bbbbbb;
@@ -149,10 +169,11 @@
       background: #bbbbbb;
     }
 
-    .btn-toggle.active {
-      background: #bbbbbb;
-      color: white;
-    }
+  .btn-toggle.active {
+  background: #cfc9ff;       /* myk pastel-lilla */
+  color: #3b2f5a;            /* dyp lilla tekst */
+  box-shadow: 0 0 8px rgba(160,120,220,0.25);
+}
 
     .calendar-grid {
       border-radius: 16px;
