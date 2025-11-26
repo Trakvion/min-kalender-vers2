@@ -12,6 +12,26 @@
 
   <!-- HER MÅ STYLE-TAGGEN VÆRE -->
   <style>
+    /* Pastellgrønn ripple (alltid i midten) */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(145, 200, 170, 0.35); /* dus pastelgrønn */
+  transform: scale(0);
+  animation: rippleAnimation 0.55s ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleAnimation {
+  0% {
+    opacity: 0.45;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.8);
+  }
+}
     * {
       box-sizing: border-box;
       margin: 0;
@@ -1329,7 +1349,34 @@
       updateCycleUI();
       renderCalendar();
     });
+ 
+    // Pastellgrønn ripple-effekt i midten av dagcellen
+    document.addEventListener("click", function(e) {
+      const cell = e.target.closest(".day-cell");
+      if (!cell) return;
 
+      // Fjern eventuell gammel ripple
+      const oldRipple = cell.querySelector(".ripple");
+      if (oldRipple) oldRipple.remove();
+
+      // Opprett ripple-element
+      const rect = cell.getBoundingClientRect();
+      const ripple = document.createElement("span");
+      ripple.classList.add("ripple");
+
+      const size = Math.max(rect.width, rect.height) * 1.2;
+      ripple.style.width = ripple.style.height = size + "px";
+
+      // Alltid midt i cellen
+      ripple.style.left = rect.width / 2 - size / 2 + "px";
+      ripple.style.top = rect.height / 2 - size / 2 + "px";
+
+      cell.appendChild(ripple);
+
+      // Fjern når animasjonen er ferdig
+      setTimeout(() => ripple.remove(), 600);
+    });
+    
     // Init
     updateCycleUI();
     renderCalendar();
