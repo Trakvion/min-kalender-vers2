@@ -165,13 +165,13 @@
       font-size: 0.85rem;
     }
 
-    .day-name {
-      text-align: center;
-      font-weight: 400;
-      color: #545454;
-      padding: 4px 0;
-      font-size: 0.75rem;
-    }
+.day-name {
+  text-align: center;
+  font-weight: 400;
+  color: #545454;
+  padding: 4px 0;
+  font-size: 0.75rem;
+}
 
 .day-cell {
   height: 64px;
@@ -187,7 +187,7 @@
   position: relative;
 }
 
-/* 👇 Overstyrer blå fokuslinje og setter en myk pastell-outline */
+/* Overstyrer blå fokuslinje og setter en myk pastell-outline */
 .day-cell:focus,
 .day-cell:focus-visible {
   outline: none;
@@ -202,28 +202,40 @@
   transform: translateY(-1px);
 }
 
-/* Valgt dag – stabil, lik farge hver gang */
-.day-cell.selected {
-  background: #f2eef8 !important;       /* lys lilla */
-  border: 2px solid #d6c2db !important; /* outline */
-  box-shadow: 0 0 0 2px #f2eef8 !important;
-  color: inherit !important;            /* ← riktig! */
+/* Dager fra annen måned */
+.day-cell.muted {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: default;
+  box-shadow: none;
 }
 
+.day-cell.muted:hover {
+  border-color: transparent;
+  transform: none;
+}
+
+/* "I dag" – dus blå ramme når ikke valgt */
+.day-cell.today:not(.selected) {
+  border: 2px solid #cdddfc !important;     /* dus blå ramme */
+  background: #f7f9ff !important;           /* svært lys blå bakgrunn */
+  box-shadow: 0 0 6px rgba(80, 120, 255, 0.15) !important;
+  color: inherit !important;
+}
+
+/* Valgt dag – lilla stil */
+.day-cell.selected {
+  background: #f2eef8 !important;           /* lys lilla */
+  border: 2px solid #d6c2db !important;     /* lilla outline */
+  box-shadow: 0 0 0 2px #f2eef8 !important;
+  color: inherit !important;
+}
+
+/* Når "i dag" også er valgt – la valgt dag (lilla) vinne */
 .day-cell.today.selected {
   background: #f2eef8 !important;
   border: 2px solid #d6c2db !important;
   box-shadow: 0 0 0 2px #f2eef8 !important;
-}
-
-.day-cell.today {
-  border: 1px solid transparent !important;
-  background: white !important;
-}
-
-.day-cell.selected .day-number {
-  color: #000000 !important;   /* ren svart for å se tydelig forskjell */
-}
 }
 
 /* Standard dag-nummer */
@@ -234,37 +246,15 @@
   align-self: flex-start;
 }
 
-    .day-label-small {
-      font-size: 0.7rem;
-      color: #6b7280;
-    }
+/* Valgt dato-nummer – alltid helt svart */
+.day-cell.selected .day-number {
+  color: #000000 !important;
+}
 
-    .day-cell.muted {
-      background: #f3f4f6;
-      color: #9ca3af;
-      cursor: default;
-      box-shadow: none;
-    }
-
-    .day-cell.muted:hover {
-      border-color: transparent;
-      transform: none;
-    }
-
-    .day-cell.today {
-      border-color: #2563eb;
-    }
-
-    .day-cell.selected {
-      background: #d0d0d0;
-      color: white;
-      border-color: #d0d0d0;
-    }
-
-    .day-cell.selected .day-number {
-      color: #000000;
-    }
-
+.day-label-small {
+  font-size: 0.7rem;
+  color: #6b7280;
+}
     .event-dots {
       display: flex;
       gap: 3px;
