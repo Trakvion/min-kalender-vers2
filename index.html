@@ -12,26 +12,27 @@
 
   <!-- HER MÅ STYLE-TAGGEN VÆRE -->
   <style>
-    /* Pastellgrønn ripple (alltid i midten) */
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(145, 200, 170, 0.35); /* dus pastelgrønn */
-  transform: scale(0);
-  animation: rippleAnimation 0.55s ease-out;
-  pointer-events: none;
-}
-
-@keyframes rippleAnimation {
-  0% {
-    opacity: 0.45;
+/* Pastellgrønn ripple (alltid i midten) */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(145, 200, 170, 0.45); /* litt sterkere grønn for å teste */
     transform: scale(0);
+    animation: rippleAnimation 0.7s ease-out;
+    pointer-events: none;
+    z-index: 0;
   }
-  100% {
-    opacity: 0;
-    transform: scale(2.8);
+
+  @keyframes rippleAnimation {
+    0% {
+      opacity: 0.8;
+      transform: scale(0);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(3.2);
+    }
   }
-}
     * {
       box-sizing: border-box;
       margin: 0;
@@ -205,6 +206,7 @@
   border: 1px solid transparent;
   transition: border 0.15s, background 0.15s, transform 0.05s, box-shadow 0.15s;
   position: relative;
+  overflow: hidden; /* 👈 viktig for ripple */
 }
 
 /* Overstyrer blå fokuslinje og setter en myk pastell-outline */
