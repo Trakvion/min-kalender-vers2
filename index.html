@@ -210,18 +210,15 @@
   color: inherit !important;            /* ← riktig! */
 }
 
-/* Hindre at 'i dag' overstyrer valgt dag */
 .day-cell.today.selected {
   background: #f2eef8 !important;
   border: 2px solid #d6c2db !important;
   box-shadow: 0 0 0 2px #f2eef8 !important;
-  color: inherit !important;
 }
 
-/* 'i dag' når den ikke er valgt */
 .day-cell.today {
-  border-color: #e4e4e7;
-  background: #fafafa;
+  border: 1px solid transparent !important;
+  background: white !important;
 }
 
 .day-cell.selected .day-number {
