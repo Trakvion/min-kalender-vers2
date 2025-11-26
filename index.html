@@ -39,11 +39,121 @@
       gap: 16px;
     }
 
-    /* Mobil-tilpasning */
-    @media (max-width: 768px) {
-      body {
-        align-items: flex-start;
-      }
+/* Mobil-tilpasning */
+@media (max-width: 768px) {
+
+  body {
+    align-items: flex-start;
+    padding: 0;
+  }
+
+  .app {
+    margin: 10px;
+    border-radius: 14px;
+    padding: 14px;
+    grid-template-columns: 1fr; /* ENKELT SPOR – kalender over, panel under */
+    gap: 18px;
+  }
+
+  /* --- Header og knapper --- */
+  .calendar-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .month-label {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+
+  /* Knapper større og mer touch-vennlige */
+  button,
+  .btn-toggle {
+    padding: 10px 16px !important;
+    font-size: 1rem;
+    border-radius: 14px;
+  }
+
+  .view-toggle {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+
+  .nav-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* --- Kalender-grid --- */
+  .calendar-grid {
+    min-height: auto;
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .day-cell {
+    height: 58px;
+    padding: 5px;
+  }
+
+  .day-name {
+    font-size: 0.70rem;
+  }
+
+  .day-number {
+    font-size: 0.85rem;
+  }
+
+  /* Flytt syklus-ikonet litt ned for små skjermer */
+  .cycle-icon {
+    width: 16px;
+    height: 16px;
+    top: 6px;
+    right: 6px;
+  }
+
+  /* --- Event-panelet under kalender --- */
+  .event-panel {
+    padding: 10px;
+    border-radius: 14px;
+    background: #f8f9fb;
+  }
+
+  .event-date-title {
+    font-size: 1rem;
+  }
+
+  /* Inputfelt større */
+  .event-form select,
+  .event-form input[type="text"],
+  .event-form input[type="time"] {
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+  }
+
+  .event-item {
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+  }
+
+  .cycle-input-row input {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
+  /* Øk spacing */
+  .cycle-panel {
+    gap: 10px;
+  }
+
+  .event-dots {
+    gap: 4px;
+  }
+}
 
       .app {
         margin: 10px;
