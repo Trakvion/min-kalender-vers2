@@ -66,7 +66,16 @@
     align-items: flex-start;
     gap: 10px;
   }
+/* Desktop: menyen er alltid synlig, hamburger skjules */
+.menu-toggle {
+  display: none;
+}
 
+.menu-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
   .month-label {
     font-size: 1.7rem;
     text-align: left;
@@ -764,13 +773,16 @@ button:active {
 <div class="calendar-header">
   <div class="month-label" id="monthLabel"></div>
 
+  <div class="calendar-header">
+  <div class="month-label" id="monthLabel"></div>
+
   <div class="header-controls">
-    <!-- Hamburger-knapp (vises bare på mobil) -->
-    <button id="menuToggle" class="menu-toggle" aria-expanded="false">
+    <!-- Hamburger-knappen (vises bare på mobil via CSS) -->
+    <button class="menu-toggle" id="menuToggle">
       ☰ 
     </button>
 
-    <!-- Panelet som inneholder de vanlige knappene -->
+    <!-- Panelet som inneholder alle knappene -->
     <div class="menu-panel" id="menuPanel">
       <div class="view-toggle">
         <button id="monthViewBtn" class="btn-toggle active">Måned</button>
@@ -870,6 +882,9 @@ button:active {
     const monthViewBtn = document.getElementById("monthViewBtn");
     const weekViewBtn = document.getElementById("weekViewBtn");
     const cycleViewBtn = document.getElementById("cycleViewBtn");
+    // Hamburger-meny (mobil)
+const menuToggle = document.getElementById("menuToggle");
+const menuPanel = document.getElementById("menuPanel");
 
     // Syklus-elementer
     const cycleLengthInput = document.getElementById("cycleLengthInput");
@@ -1428,7 +1443,10 @@ button:active {
 
       updateReminders();
     }
-
+// Åpne/lukk meny på mobil
+menuToggle.addEventListener("click", () => {
+  menuPanel.classList.toggle("open");
+});
     prevBtn.addEventListener("click", () => {
       if (viewMode === "month" || viewMode === "cycle") {
         currentMonth--;
