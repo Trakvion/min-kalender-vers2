@@ -784,6 +784,20 @@ button:active {
         /* gjør ikonene mer vibrante – samme som i .cycle-icon */
         filter: brightness(1.08) contrast(1.2) saturate(1.15);
     }
+    /* Tving dropdown-oppførsel på mobil */
+@media (max-width: 768px) {
+  /* Panel med Måned/Uke/Syklus + Forrige/I dag/Neste er skjult som standard */
+  .menu-panel {
+    display: none;
+  }
+
+  /* Når vi har klikket på ☰ (JS legger til .open) → vis */
+  .menu-panel.open {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
   </style>
 </head>
 <body>
