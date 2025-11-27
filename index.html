@@ -559,33 +559,49 @@
     width: 100%;
     justify-content: flex-start;
   }
+/* Meny-panel m/ animasjon */
+.menu-panel {
+  /* grunnstil */
+  width: 100%;
+  margin-top: 8px;
 
-   .menu-panel {
-    /* grunnstil */
-    width: 100%;
-    margin-top: 8px;
+  /* skjult som standard */
+  display: none;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
 
-    /* skjult som standard */
-    display: none;
-    opacity: 0;
-    transform: translateY(-8px);
-    pointer-events: none;
+  /* smooth fade/slide */
+  transition:
+    opacity 0.22s ease-out,
+    transform 0.22s ease-out;
+  z-index: 20;          /* over overlayen */
+}
 
-    /* smooth fade/slide */
-    transition:
-      opacity 0.22s ease-out,
-      transform 0.22s ease-out;
-    z-index: 20;          /* over overlayen */
-  }
+.menu-panel.open {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
 
-  .menu-panel.open {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
+/* 🔽 OVERLAYEN – EGEN BLOKK, IKKE INNI .menu-panel.open */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease-out;
+  z-index: 10; /* under menyen */
+}
+
+.menu-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
 }
 
   /* Innholdet i panelet – en kolonne med valg */
@@ -675,17 +691,16 @@
   </style>
 </head>
 <body>
- <div class="menu-overlay" id="menuOverlay"></div> 
+  <div class="menu-overlay" id="menuOverlay"></div> 
   <div class="app">
     <div>
       <div class="calendar-header">
         <div class="month-label" id="monthLabel"></div>
 
         <div class="header-controls">
-          <!-- Hamburger (mobil) -->
+          <!-- KUN hamburgermeny + panel her -->
           <button class="menu-toggle" id="menuToggle">☰</button>
 
-          <!-- Panelet med visning + navigasjon -->
           <div class="menu-panel" id="menuPanel">
             <div class="view-toggle">
               <button id="monthViewBtn" class="btn-toggle active">Måned</button>
