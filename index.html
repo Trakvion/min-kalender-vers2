@@ -60,44 +60,61 @@
     gap: 14px;
   }
 
-  /* 2. Toppområde / header */
-  .calendar-header {
+   .calendar-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-/* Desktop: menyen er alltid synlig, hamburger skjules */
-.menu-toggle {
-  display: none;
-}
 
-.menu-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-  .month-label {
-    font-size: 1.7rem;
-    text-align: left;
+  .header-controls {
     width: 100%;
-  }
-
-  .calendar-header > div:last-child {
-    width: 100%;
-    align-items: stretch !important;
-  }
-
-  /* 3. Visningsknapper (Måned / Uke / Syklus) */
-  .view-toggle {
-    width: 100%;
+    align-items: stretch;
     justify-content: space-between;
+  }
+
+  /* Hamburger vises på mobil */
+  .menu-toggle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #efefef;
+    border: none;
+    font-size: 1rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+
+  .menu-toggle:active {
+    transform: scale(0.95);
+  }
+
+  /* Panelet ER skjult som standard på mobil */
+  .menu-panel {
+    display: none;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  /* Når vi klikker på hamburger → class "open" → vis */
+  .menu-panel.open {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .view-toggle,
+  .nav-buttons {
+    width: 100%;
+    display: flex;
     gap: 6px;
   }
 
-  .view-toggle button {
+  .view-toggle button,
+  .nav-buttons button {
     flex: 1;
-    padding: 10px 0;
-    font-size: 1rem;
   }
 
   /* 4. Navigasjonsknapper (Forrige / I dag / Neste) */
@@ -774,39 +791,37 @@ button:active {
   <!-- Jeg har ikke rørt script-delen – den du limte inn fungerer videre. -->
   <!-- Bare behold resten slik du hadde, under denne linjen. -->
 
-  <div class="app">
-    <div>
-<div class="calendar-header">
-  <div class="month-label" id="monthLabel"></div>
+ <div class="app">
+  <div>
+    <div class="calendar-header">
+      <div class="month-label" id="monthLabel"></div>
 
-  <div class="calendar-header">
-  <div class="month-label" id="monthLabel"></div>
+      <div class="header-controls">
+        <!-- Hamburger-knappen (skjules på desktop via CSS) -->
+        <button class="menu-toggle" id="menuToggle">
+          ☰
+        </button>
 
-  <div class="header-controls">
-    <!-- Hamburger-knappen (vises bare på mobil via CSS) -->
-    <button class="menu-toggle" id="menuToggle">
-      ☰ 
-    </button>
-
-    <!-- Panelet som inneholder alle knappene -->
-    <div class="menu-panel" id="menuPanel">
-      <div class="view-toggle">
-        <button id="monthViewBtn" class="btn-toggle active">Måned</button>
-        <button id="weekViewBtn" class="btn-toggle">Uke</button>
-        <button id="cycleViewBtn" class="btn-toggle">Syklus</button>
+        <!-- Panelet som inneholder alle knappene -->
+        <div class="menu-panel" id="menuPanel">
+          <div class="view-toggle">
+            <button id="monthViewBtn" class="btn-toggle active">Måned</button>
+            <button id="weekViewBtn" class="btn-toggle">Uke</button>
+            <button id="cycleViewBtn" class="btn-toggle">Syklus</button>
+          </div>
+          <div class="nav-buttons">
+            <button id="prevBtn">&#8592; Forrige</button>
+            <button id="todayBtn">I dag</button>
+            <button id="nextBtn">Neste &#8594;</button>
+          </div>
+        </div>
       </div>
-      <div class="nav-buttons">
-        <button id="prevBtn">&#8592; Forrige</button>
-        <button id="todayBtn">I dag</button>
-        <button id="nextBtn">Neste &#8594;</button>
-      </div>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid">
+      <!-- Genereres i JS -->
     </div>
   </div>
-</div>
-      <div class="calendar-grid" id="calendarGrid">
-        <!-- Genereres i JS -->
-      </div>
-    </div>
 
     <div class="event-panel">
       <div id="reminderBanner" class="reminder-banner"></div>
