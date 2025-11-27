@@ -5,20 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>Min kalender – måned, uke og syklus</title>
 
-  <!-- Montserrat Thin + flere vekter -->
+  <!-- Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600&display=swap" rel="stylesheet">
 
-  <!-- HER MÅ STYLE-TAGGEN VÆRE -->
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: "Montserrat", sans-serif;
-      font-weight: 100;   /* super-tynn som utgangspunkt */
+      font-weight: 100;
     }
+
     body {
       min-height: 100vh;
       background: #f3f4f6;
@@ -39,286 +39,7 @@
       gap: 16px;
     }
 
-/* ================================
-   MOBIL-OPTIMALISERING (≤ 768px)
-   ================================ */
-@media (max-width: 768px) {
-
-  /* 1. Layout & kropp */
-  body {
-    align-items: flex-start;
-    background: #f3f4f6;
-  }
-
-  .app {
-    margin: 10px;
-    max-width: 100%;
-    border-radius: 18px;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
-    grid-template-columns: 1fr;         /* én kolonne: kalender over, panel under */
-    padding: 14px 12px 16px;
-    gap: 14px;
-  }
-
-   .calendar-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .header-controls {
-    width: 100%;
-    align-items: stretch;
-    justify-content: space-between;
-  }
-
-  /* Hamburger vises på mobil */
-  .menu-toggle {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 14px;
-    border-radius: 12px;
-    background: #efefef;
-    border: none;
-    font-size: 1rem;
-    font-weight: 400;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.15s ease;
-  }
-
-  .menu-toggle:active {
-    transform: scale(0.95);
-  }
-
-  /* Panelet ER skjult som standard på mobil */
-  .menu-panel {
-    display: none;
-    width: 100%;
-    margin-top: 8px;
-  }
-
-  /* Når vi klikker på hamburger → class "open" → vis */
-  .menu-panel.open {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .view-toggle,
-  .nav-buttons {
-    width: 100%;
-    display: flex;
-    gap: 6px;
-  }
-
-  .view-toggle button,
-  .nav-buttons button {
-    flex: 1;
-  }
-
-  /* 4. Navigasjonsknapper (Forrige / I dag / Neste) */
-  .nav-buttons {
-    width: 100%;
-    justify-content: space-between;
-    gap: 6px;
-  }
-
-  .nav-buttons button {
-    flex: 1;
-    padding: 9px 0;
-    font-size: 0.95rem;
-  }
-
-  /* 5. Kalender-grid & dagceller */
-  .calendar-grid {
-    padding: 6px;
-    gap: 4px;
-  }
-
-  .day-name {
-    font-size: 0.75rem;
-    padding: 2px 0;
-  }
-
-  .day-cell {
-    height: 70px;
-    padding: 6px;
-  }
-
-  .day-number {
-    font-size: 1rem;
-  }
-
-  /* Syklus-ikon litt mindre på mobil */
-  .cycle-icon {
-    width: 16px;
-    height: 16px;
-    top: 4px;
-    right: 4px;
-  }
-
-  /* 6. Event-panel (høyre side på desktop, under på mobil) */
-  .event-panel {
-    padding: 12px 10px 14px;
-    gap: 10px;
-  }
-   /* ----- MOBIL HAMBURGER-MENY ----- */
-
-  .header-controls {
-    width: 100%;
-    align-items: stretch;
-  }
-
-  .menu-toggle {
-    display: inline-flex;
-    align-self: flex-end;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 14px;
-    border-radius: 12px;
-    background: #efefef;
-    border: none;
-    font-size: 1rem;
-    font-weight: 400;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.15s ease;
-  }
-
-  .menu-toggle:active {
-    transform: scale(0.95);
-  }
-
-  /* Lukkede paneler */
-  .menu-panel {
-    display: none;
-    width: 100%;
-    margin-top: 8px;
-  }
-
-  /* Åpne paneler */
-  .menu-panel.open {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  /* Knappene inni menyen */
-  .view-toggle, .nav-buttons {
-    width: 100%;
-    display: flex;
-    gap: 6px;
-  }
-
-  .view-toggle button,
-  .nav-buttons button {
-    flex: 1;
-  }
-
-  .event-date-title {
-    font-size: 1.05rem;
-    line-height: 1.4;
-  }
-
-  .event-list {
-    max-height: 220px;
-    gap: 8px;
-  }
-
-  .event-item {
-    padding: 10px 12px;
-    font-size: 0.95rem;
-  }
-
-  .event-time {
-    font-size: 0.8rem;
-  }
-
-  /* 7. Skjema for hendelser */
-  .event-form {
-    margin-top: 4px;
-    gap: 6px;
-  }
-
-  .event-form select,
-  .event-form input[type="time"],
-  .event-form input[type="text"] {
-    font-size: 0.9rem;
-    padding: 7px 10px;
-  }
-
-  .event-form input[type="text"] {
-    flex-basis: 100%;
-  }
-
-  /* 8. Syklus-panel */
-  .cycle-panel {
-    margin-top: 6px;
-    padding-top: 8px;
-    gap: 8px;
-  }
-
-  .cycle-input-row {
-    gap: 8px;
-  }
-
-  .cycle-input-row input {
-    width: 70px;
-    font-size: 0.85rem;
-  }
-
-  .cycle-buttons {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .cycle-buttons .small-btn {
-    flex: 1;
-    justify-content: center;
-  }
-}
-
-
-      .app {
-        margin: 10px;
-        border-radius: 16px;
-        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
-        grid-template-columns: 1fr;
-        padding: 12px;
-        gap: 12px;
-      }
-
-      .calendar-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-
-      .calendar-header > div:last-child {
-        width: 100%;
-        align-items: stretch !important;
-      }
-
-      .view-toggle,
-      .nav-buttons {
-        width: 100%;
-        justify-content: space-between;
-      }
-
-      .calendar-grid {
-        min-height: 260px;
-      }
-
-      .day-cell {
-        height: 54px;
-        padding: 4px;
-      }
-
-      .event-panel {
-        max-height: 55vh;
-        overflow-y: auto;
-      }
-    }
+    /* ---------- HEADER ---------- */
 
     .calendar-header {
       display: flex;
@@ -328,24 +49,37 @@
       gap: 12px;
     }
 
-  .month-label {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 300;
-  font-size: 1.8rem;
-  letter-spacing: 0.05em;
-  text-transform: capitalize;
+    .month-label {
+      font-weight: 300;
+      font-size: 1.8rem;
+      letter-spacing: 0.05em;
+      text-transform: capitalize;
     }
- /* 👉 LEGG DEN INN HER (rett etter header-reglene er perfekt) */
-  .header-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    position: relative;
-  }
-    .nav-buttons {
+
+    .header-controls {
       display: flex;
+      align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
+      position: relative;
+    }
+
+    /* Meny-knapp (desktop: skjult) */
+    .menu-toggle {
+      display: none;
+      border-radius: 12px;
+      padding: 8px 12px;
+      border: none;
+      background: #efefef;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    /* Panelet med Måned/Uke/Syklus + Forrige/I dag/Neste */
+    .menu-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .view-toggle {
@@ -354,51 +88,44 @@
       flex-wrap: wrap;
     }
 
-button {
-  border: none;
-  border-radius: 999px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  background: #e5e7eb;
-  white-space: nowrap;
-  touch-action: manipulation;
-  font-weight: 400;
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
-  /* SMOOTH OVERGANGER */
-  transition:
-    background-color 0.25s ease,
-    color 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.12s cubic-bezier(0.15, 0.85, 0.35, 1);
-}
+    /* ---------- KNAPPER ---------- */
 
-button:hover {
-  background: #dcdcdc; /* mykere lys grå */
-  box-shadow: 0 4px 11px rgba(0,0,0,0.1);
-}
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: #e5e7eb;
+      white-space: nowrap;
+      touch-action: manipulation;
+      font-weight: 400;
+      transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.12s cubic-bezier(0.15, 0.85, 0.35, 1);
+    }
 
-  /* I DAG-knappen: helt nøytral og myk */
-#todayBtn {
-  background: #f5f5f7;
-  color: #333;
-  border: 1px solid #e5e5e7;
-}
+    button:hover {
+      background: #dcdcdc;
+      box-shadow: 0 4px 11px rgba(0,0,0,0.1);
+    }
 
-#todayBtn:hover {
-  background: #ececef;
-  color: #111;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.07);
-}
-    
-button:active {
-  transform: scale(0.96); /* myk nedtrykk */
-}
+    button:active {
+      transform: scale(0.96);
+    }
 
     .btn-primary {
       background: #bbbbbb;
@@ -409,11 +136,26 @@ button:active {
       background: #bbbbbb;
     }
 
-  .btn-toggle.active {
-  background: #cfc9ff;       /* myk pastel-lilla */
-  color: #3b2f5a;            /* dyp lilla tekst */
-  box-shadow: 0 0 8px rgba(160,120,220,0.25);
-}
+    .btn-toggle.active {
+      background: #cfc9ff;
+      color: #3b2f5a;
+      box-shadow: 0 0 8px rgba(160,120,220,0.25);
+    }
+
+    /* I dag-knappen: ekstra nøytral */
+    #todayBtn {
+      background: #f5f5f7;
+      color: #333;
+      border: 1px solid #e5e5e7;
+    }
+
+    #todayBtn:hover {
+      background: #ececef;
+      color: #111;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+    }
+
+    /* ---------- KALENDER ---------- */
 
     .calendar-grid {
       border-radius: 16px;
@@ -423,118 +165,110 @@ button:active {
       grid-template-columns: repeat(7, 1fr);
       gap: 5px;
       font-size: 0.85rem;
+      min-height: 260px;
     }
 
-.day-name {
-  text-align: center;
-  font-weight: 400;
-  color: #545454;
-  padding: 4px 0;
-  font-size: 0.75rem;
-}
+    .day-name {
+      text-align: center;
+      font-weight: 400;
+      color: #545454;
+      padding: 4px 0;
+      font-size: 0.75rem;
+    }
 
-.day-cell {
-  height: 64px;
-  background: white;
-  border-radius: 12px;
-  padding: 6px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 1px solid transparent;
-  transition: border 0.15s, background 0.15s, transform 0.05s, box-shadow 0.15s;
-  position: relative;
-  overflow: hidden; /* 👈 viktig for ripple */
-}
+    .day-cell {
+      height: 64px;
+      background: white;
+      border-radius: 12px;
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid transparent;
+      transition: border 0.15s, background 0.15s, transform 0.05s, box-shadow 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
 
-@keyframes daySelectPulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(145, 200, 170, 0.0);
-  }
-  50% {
-    transform: scale(1.03); /* mindre og finere */
-    box-shadow: 0 0 18px 8px rgba(145, 200, 170, 0.45);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(145, 200, 170, 0.0);
-  }
-}
+    @keyframes daySelectPulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(145, 200, 170, 0.0);
+      }
+      50% {
+        transform: scale(1.03);
+        box-shadow: 0 0 18px 8px rgba(145, 200, 170, 0.45);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(145, 200, 170, 0.0);
+      }
+    }
 
-    /* Overstyrer blå fokuslinje og setter en myk pastell-outline */
-.day-cell:focus,
-.day-cell:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #d6c2db;   /* myk lilla-grå */
-  border-radius: 12px;
-}
+    .day-cell:focus,
+    .day-cell:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px #d6c2db;
+      border-radius: 12px;
+    }
 
-/* Hover-effekt */
-.day-cell:hover {
-  border-color: #dbdbdb;
-  background: #fcfcfe; /* lett tonet hvit */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  transform: translateY(-1px);
-}
+    .day-cell:hover {
+      border-color: #dbdbdb;
+      background: #fcfcfe;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      transform: translateY(-1px);
+    }
 
-/* Dager fra annen måned */
-.day-cell.muted {
-  background: #f3f4f6;
-  color: #9ca3af;
-  cursor: default;
-  box-shadow: none;
-}
+    .day-cell.muted {
+      background: #f3f4f6;
+      color: #9ca3af;
+      cursor: default;
+      box-shadow: none;
+    }
 
-.day-cell.muted:hover {
-  border-color: transparent;
-  transform: none;
-}
+    .day-cell.muted:hover {
+      border-color: transparent;
+      transform: none;
+    }
 
-/* "I dag" – dus blå ramme når ikke valgt */
-.day-cell.today:not(.selected) {
-  border: 2px solid #cdddfc !important;     /* dus blå ramme */
-  background: #f7f9ff !important;           /* svært lys blå bakgrunn */
-  box-shadow: 0 0 6px rgba(80, 120, 255, 0.15) !important;
-  color: inherit !important;
-}
+    .day-cell.today:not(.selected) {
+      border: 2px solid #cdddfc !important;
+      background: #f7f9ff !important;
+      box-shadow: 0 0 6px rgba(80, 120, 255, 0.15) !important;
+      color: inherit !important;
+    }
 
-/* Valgt dag – lilla stil */
-.day-cell.selected {
-  background: #f2eef8 !important;           /* lys lilla */
-  border: 2px solid #d6c2db !important;     /* lilla outline */
-  box-shadow: 0 0 0 2px #f2eef8 !important;
-  color: inherit !important;
+    .day-cell.selected {
+      background: #f2eef8 !important;
+      border: 2px solid #d6c2db !important;
+      box-shadow: 0 0 0 2px #f2eef8 !important;
+      color: inherit !important;
+      animation: daySelectPulse 1.2s cubic-bezier(0.15, 0.85, 0.35, 1);
+    }
 
-    /* Dette gjør “ripple” (pulse) mulig */
-  animation: daySelectPulse 1.2s cubic-bezier(0.15, 0.85, 0.35, 1);
-}
+    .day-cell.today.selected {
+      background: #f2eef8 !important;
+      border: 2px solid #d6c2db !important;
+      box-shadow: 0 0 0 2px #f2eef8 !important;
+    }
 
-/* Når "i dag" også er valgt – la valgt dag (lilla) vinne */
-.day-cell.today.selected {
-  background: #f2eef8 !important;
-  border: 2px solid #d6c2db !important;
-  box-shadow: 0 0 0 2px #f2eef8 !important;
-}
+    .day-number {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: #111827;
+      align-self: flex-start;
+    }
 
-/* Standard dag-nummer */
-.day-number {
-  font-size: 0.9rem;
-  font-weight: 300;
-  color: #111827;
-  align-self: flex-start;
-}
+    .day-cell.selected .day-number {
+      color: #000000 !important;
+    }
 
-/* Valgt dato-nummer – alltid helt svart */
-.day-cell.selected .day-number {
-  color: #000000 !important;
-}
+    .day-label-small {
+      font-size: 0.7rem;
+      color: #6b7280;
+    }
 
-.day-label-small {
-  font-size: 0.7rem;
-  color: #6b7280;
-}
     .event-dots {
       display: flex;
       gap: 3px;
@@ -548,24 +282,23 @@ button:active {
       background: #9ca3af;
     }
 
-    /* Fargekoder for dotter i kalenderen */
-    .event-dot-default { background: #c9c9d1; }   /* grå */
-    .event-dot-jobb { background: #9ac7ff; }      /* blå */
-    .event-dot-skole { background: #d6b4ff; }     /* lilla */
-    .event-dot-personlig { background: #b8f2c8; } /* grønn */
-    .event-dot-annet { background: #ffd1a8; }     /* oransje */
+    .event-dot-default { background: #c9c9d1; }
+    .event-dot-jobb { background: #9ac7ff; }
+    .event-dot-skole { background: #d6b4ff; }
+    .event-dot-personlig { background: #b8f2c8; }
+    .event-dot-annet { background: #ffd1a8; }
 
-    /* Syklus-ikon i dagceller */
-   .cycle-icon {
-    width: 18px;
-    height: 18px;
-    position: absolute;
-    top: 4px;          /* ← lå tidligere på bottom */
-    right: 4px;        /* høyre hjørne */
-    margin: 0;
-
-    filter: brightness(1.08) contrast(1.2) saturate(1.15)
+    .cycle-icon {
+      width: 18px;
+      height: 18px;
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      margin: 0;
+      filter: brightness(1.08) contrast(1.2) saturate(1.15);
     }
+
+    /* ---------- HØYRE PANEL ---------- */
 
     .event-panel {
       border-radius: 16px;
@@ -574,11 +307,14 @@ button:active {
       display: flex;
       flex-direction: column;
       gap: 10px;
+      max-height: 55vh;
+      overflow-y: auto;
     }
-/* All tekst inne i høyre panel */
-.event-panel * {
-  font-weight: 400;
-}
+
+    .event-panel * {
+      font-weight: 400;
+    }
+
     .reminder-banner {
       display: none;
       border-radius: 12px;
@@ -590,9 +326,7 @@ button:active {
       font-weight: 300;
     }
 
-    .reminder-strong {
-      font-weight: 600;
-    }
+    .reminder-strong { font-weight: 600; }
 
     .event-date-title {
       font-size: 1.05rem;
@@ -647,22 +381,18 @@ button:active {
       background: #e5e7eb;
       color: #374151;
     }
-
     .event-tag-jobb {
       background: rgba(14, 165, 233, 0.12);
       color: #0369a1;
     }
-
     .event-tag-skole {
       background: rgba(168, 85, 247, 0.12);
       color: #6d28d9;
     }
-
     .event-tag-personlig {
       background: rgba(34, 197, 94, 0.12);
       color: #15803d;
     }
-
     .event-tag-annet {
       background: rgba(249, 115, 22, 0.12);
       color: #c2410c;
@@ -729,10 +459,7 @@ button:active {
       gap: 6px;
     }
 
-    .cycle-title {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
+    .cycle-title { font-weight: 600; font-size: 0.9rem; }
 
     .cycle-input-row {
       display: flex;
@@ -767,9 +494,7 @@ button:active {
       flex-wrap: wrap;
     }
 
-    .cycle-info {
-      color: #6b7280;
-    }
+    .cycle-info { color: #6b7280; }
 
     .cycle-legend {
       display: flex;
@@ -781,61 +506,166 @@ button:active {
     .cycle-legend-icon {
       width: 18px;
       height: 18px;
-        /* gjør ikonene mer vibrante – samme som i .cycle-icon */
-        filter: brightness(1.08) contrast(1.2) saturate(1.15);
+      filter: brightness(1.08) contrast(1.2) saturate(1.15);
     }
-    /* Tving dropdown-oppførsel på mobil */
-@media (max-width: 768px) {
-  /* Panel med Måned/Uke/Syklus + Forrige/I dag/Neste er skjult som standard */
-  .menu-panel {
-    display: none;
-  }
 
-  /* Når vi har klikket på ☰ (JS legger til .open) → vis */
-  .menu-panel.open {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-}
+    /* ---------- MOBIL (≤ 768px) ---------- */
+
+    @media (max-width: 768px) {
+      body {
+        align-items: flex-start;
+      }
+
+      .app {
+        margin: 10px;
+        max-width: 100%;
+        border-radius: 18px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+        grid-template-columns: 1fr;
+        padding: 14px 12px 16px;
+        gap: 14px;
+      }
+
+      .calendar-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .month-label {
+        font-size: 1.7rem;
+        text-align: left;
+        width: 100%;
+      }
+
+      /* Hamburger vises på mobil */
+      .menu-toggle {
+        display: inline-flex;
+      }
+
+      /* Panel skjules som standard på mobil */
+      .menu-panel {
+        display: none;
+        width: 100%;
+        margin-top: 8px;
+      }
+
+      .menu-panel.open {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .view-toggle,
+      .nav-buttons {
+        width: 100%;
+        gap: 6px;
+      }
+
+      .view-toggle button,
+      .nav-buttons button {
+        flex: 1;
+      }
+
+      .calendar-grid {
+        padding: 6px;
+        gap: 4px;
+      }
+
+      .day-cell {
+        height: 70px;
+        padding: 6px;
+      }
+
+      .day-number { font-size: 1rem; }
+
+      .cycle-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .event-panel {
+        padding: 12px 10px 14px;
+        gap: 10px;
+      }
+
+      .event-date-title {
+        font-size: 1.05rem;
+        line-height: 1.4;
+      }
+
+      .event-list {
+        max-height: 220px;
+        gap: 8px;
+      }
+
+      .event-item {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+      }
+
+      .event-form {
+        margin-top: 4px;
+        gap: 6px;
+      }
+
+      .event-form select,
+      .event-form input[type="time"],
+      .event-form input[type="text"] {
+        font-size: 0.9rem;
+        padding: 7px 10px;
+      }
+
+      .event-form input[type="text"] {
+        flex-basis: 100%;
+      }
+
+      .cycle-panel {
+        margin-top: 6px;
+        padding-top: 8px;
+        gap: 8px;
+      }
+
+      .cycle-input-row input {
+        width: 70px;
+        font-size: 0.85rem;
+      }
+
+      .cycle-buttons .small-btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- resten av HTML + JS-en din (som du allerede har) -->
-  <!-- Jeg har ikke rørt script-delen – den du limte inn fungerer videre. -->
-  <!-- Bare behold resten slik du hadde, under denne linjen. -->
+  <div class="app">
+    <div>
+      <div class="calendar-header">
+        <div class="month-label" id="monthLabel"></div>
 
- <div class="app">
-  <div>
-    <div class="calendar-header">
-      <div class="month-label" id="monthLabel"></div>
+        <div class="header-controls">
+          <!-- Hamburger (mobil) -->
+          <button class="menu-toggle" id="menuToggle">☰</button>
 
-      <div class="header-controls">
-        <!-- Hamburger-knappen (skjules på desktop via CSS) -->
-        <button class="menu-toggle" id="menuToggle">
-          ☰
-        </button>
-
-        <!-- Panelet som inneholder alle knappene -->
-        <div class="menu-panel" id="menuPanel">
-          <div class="view-toggle">
-            <button id="monthViewBtn" class="btn-toggle active">Måned</button>
-            <button id="weekViewBtn" class="btn-toggle">Uke</button>
-            <button id="cycleViewBtn" class="btn-toggle">Syklus</button>
-          </div>
-          <div class="nav-buttons">
-            <button id="prevBtn">&#8592; Forrige</button>
-            <button id="todayBtn">I dag</button>
-            <button id="nextBtn">Neste &#8594;</button>
+          <!-- Panelet med visning + navigasjon -->
+          <div class="menu-panel" id="menuPanel">
+            <div class="view-toggle">
+              <button id="monthViewBtn" class="btn-toggle active">Måned</button>
+              <button id="weekViewBtn" class="btn-toggle">Uke</button>
+              <button id="cycleViewBtn" class="btn-toggle">Syklus</button>
+            </div>
+            <div class="nav-buttons">
+              <button id="prevBtn">&#8592; Forrige</button>
+              <button id="todayBtn">I dag</button>
+              <button id="nextBtn">Neste &#8594;</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="calendar-grid" id="calendarGrid">
-      <!-- Genereres i JS -->
+      <div class="calendar-grid" id="calendarGrid"></div>
     </div>
-  </div>
 
     <div class="event-panel">
       <div id="reminderBanner" class="reminder-banner"></div>
@@ -851,11 +681,7 @@ button:active {
           <option value="personlig">Personlig</option>
           <option value="annet">Annet</option>
         </select>
-        <input
-          type="time"
-          id="eventTimeInput"
-          placeholder="Tid (valgfritt)"
-        />
+        <input type="time" id="eventTimeInput" placeholder="Tid (valgfritt)" />
         <input
           type="text"
           id="eventInput"
@@ -866,7 +692,6 @@ button:active {
         <button type="button" class="small-btn" id="cancelEditBtn" style="display:none;">Avbryt</button>
       </form>
 
-      <!-- Syklus-panel -->
       <div class="cycle-panel">
         <div class="cycle-title">Syklus</div>
         <div class="cycle-input-row">
@@ -917,9 +742,10 @@ button:active {
     const monthViewBtn = document.getElementById("monthViewBtn");
     const weekViewBtn = document.getElementById("weekViewBtn");
     const cycleViewBtn = document.getElementById("cycleViewBtn");
-    // Hamburger-meny (mobil)
-const menuToggle = document.getElementById("menuToggle");
-const menuPanel = document.getElementById("menuPanel");
+
+    // Hamburger-meny
+    const menuToggle = document.getElementById("menuToggle");
+    const menuPanel = document.getElementById("menuPanel");
 
     // Syklus-elementer
     const cycleLengthInput = document.getElementById("cycleLengthInput");
@@ -947,12 +773,10 @@ const menuPanel = document.getElementById("menuPanel");
     let currentYear = today.getFullYear();
     let currentMonth = today.getMonth();
     let selectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    let viewMode = "month"; // 'month', 'week', 'cycle'
+    let viewMode = "month";
 
-    // Redigeringstilstand
-    let editingEvent = null; // { dateKey, index }
+    let editingEvent = null;
 
-    // Syklus-innstillinger
     function defaultCycleSettings() {
       return {
         cycleLength: 28,
@@ -1025,8 +849,8 @@ const menuPanel = document.getElementById("menuPanel");
 
     function getWeekStart(date) {
       const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      let day = d.getDay(); // 0=Sun..6=Sat
-      const diff = (day + 6) % 7; // mandag=0
+      let day = d.getDay();
+      const diff = (day + 6) % 7;
       d.setDate(d.getDate() - diff);
       return d;
     }
@@ -1042,29 +866,27 @@ const menuPanel = document.getElementById("menuPanel");
     }
 
     function addDotsForDate(cell, eventsForDay) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "event-dots";
+      const wrapper = document.createElement("div");
+      wrapper.className = "event-dots";
 
-  const seenTypes = new Set();
-  for (const ev of eventsForDay) {
-    const typeKey = ev.type || "default";
+      const seenTypes = new Set();
+      for (const ev of eventsForDay) {
+        const typeKey = ev.type || "default";
+        if (seenTypes.has(typeKey)) continue;
+        seenTypes.add(typeKey);
 
-    if (seenTypes.has(typeKey)) continue;
-    seenTypes.add(typeKey);
+        const dot = document.createElement("div");
+        dot.className = `event-dot event-dot-${typeKey}`;
+        wrapper.appendChild(dot);
 
-    const dot = document.createElement("div");
-    dot.className = `event-dot event-dot-${typeKey}`;
-    wrapper.appendChild(dot);
+        if (seenTypes.size >= 4) break;
+      }
 
-    if (seenTypes.size >= 4) break; // nå vises opptil 4 dotter
-  }
-
-  if (seenTypes.size > 0) {
-    cell.appendChild(wrapper);
+      if (seenTypes.size > 0) {
+        cell.appendChild(wrapper);
       }
     }
 
-    // Bruker ikoner i stedet for fargestreker
     function renderCycleIndicator(cell, dateObj) {
       if (!cycleSettings || !cycleSettings.lastStartDateKey) return;
 
@@ -1073,27 +895,23 @@ const menuPanel = document.getElementById("menuPanel");
 
       const oneDayMs = 24 * 60 * 60 * 1000;
       const diff = Math.floor((dateObj - startDate) / oneDayMs);
-      if (diff < 0) return; // før første registrerte start
+      if (diff < 0) return;
 
       const cycleLen = cycleSettings.cycleLength || 28;
       const periodLen = cycleSettings.periodLength || 5;
       if (cycleLen <= 0) return;
 
       const phase = diff % cycleLen;
-
-      const ovulationDay = Math.round(cycleLen - 14); // grovt anslag
+      const ovulationDay = Math.round(cycleLen - 14);
       const fertileStart = ovulationDay - 3;
       const fertileEnd = ovulationDay + 1;
 
       let iconSrc = null;
 
-      // Mensen
       if (phase < periodLen) {
-        iconSrc = "period.png"; // dråpe
-      }
-      // Fruktbar periode
-      else if (phase >= fertileStart && phase <= fertileEnd) {
-        iconSrc = "fertile.png"; // blomst
+        iconSrc = "period.png";
+      } else if (phase >= fertileStart && phase <= fertileEnd) {
+        iconSrc = "fertile.png";
       }
 
       if (!iconSrc) return;
@@ -1102,7 +920,6 @@ const menuPanel = document.getElementById("menuPanel");
       img.src = iconSrc;
       img.className = "cycle-icon";
       img.alt = "";
-
       cell.appendChild(img);
     }
 
@@ -1124,7 +941,7 @@ const menuPanel = document.getElementById("menuPanel");
       const daysInMonth = lastDay.getDate();
 
       let startDay = firstDay.getDay();
-      startDay = (startDay + 6) % 7; // mandag først
+      startDay = (startDay + 6) % 7;
 
       const events = loadEvents();
 
@@ -1159,7 +976,6 @@ const menuPanel = document.getElementById("menuPanel");
           addDotsForDate(cell, events[dateKey]);
         }
 
-        // Syklus-ikon
         renderCycleIndicator(cell, dateObj);
 
         cell.addEventListener("click", () => {
@@ -1180,7 +996,11 @@ const menuPanel = document.getElementById("menuPanel");
       calendarGrid.innerHTML = "";
 
       const weekStart = getWeekStart(selectedDate);
-      const weekEnd = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6);
+      const weekEnd = new Date(
+        weekStart.getFullYear(),
+        weekStart.getMonth(),
+        weekStart.getDate() + 6
+      );
 
       const label = `${weekStart.getDate()}. ${monthNames[weekStart.getMonth()]} – ${weekEnd.getDate()}. ${monthNames[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
       monthLabel.textContent = label;
@@ -1191,7 +1011,11 @@ const menuPanel = document.getElementById("menuPanel");
         const div = document.createElement("div");
         div.className = "day-name";
 
-        const dateObj = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + index);
+        const dateObj = new Date(
+          weekStart.getFullYear(),
+          weekStart.getMonth(),
+          weekStart.getDate() + index
+        );
         const dayNum = dateObj.getDate();
 
         div.innerHTML = `<div>${name}</div><div class="day-label-small">${dayNum}.</div>`;
@@ -1203,7 +1027,11 @@ const menuPanel = document.getElementById("menuPanel");
         cell.type = "button";
         cell.className = "day-cell";
 
-        const dateObj = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i);
+        const dateObj = new Date(
+          weekStart.getFullYear(),
+          weekStart.getMonth(),
+          weekStart.getDate() + i
+        );
         const dateKey = formatDateKey(dateObj);
 
         const numberDiv = document.createElement("div");
@@ -1223,7 +1051,6 @@ const menuPanel = document.getElementById("menuPanel");
           addDotsForDate(cell, events[dateKey]);
         }
 
-        // Syklus-ikon
         renderCycleIndicator(cell, dateObj);
 
         cell.addEventListener("click", () => {
@@ -1240,7 +1067,6 @@ const menuPanel = document.getElementById("menuPanel");
       }
     }
 
-    // Syklus-visning: samme som måned, men fokus på syklus
     function renderCalendarCycle() {
       calendarGrid.innerHTML = "";
 
@@ -1259,7 +1085,7 @@ const menuPanel = document.getElementById("menuPanel");
       const daysInMonth = lastDay.getDate();
 
       let startDay = firstDay.getDay();
-      startDay = (startDay + 6) % 7; // mandag først
+      startDay = (startDay + 6) % 7;
 
       for (let i = 0; i < startDay; i++) {
         const cell = document.createElement("div");
@@ -1288,7 +1114,6 @@ const menuPanel = document.getElementById("menuPanel");
           cell.classList.add("selected");
         }
 
-        // Kun syklus-ikoner
         renderCycleIndicator(cell, dateObj);
 
         cell.addEventListener("click", () => {
@@ -1306,12 +1131,17 @@ const menuPanel = document.getElementById("menuPanel");
     }
 
     function renderEventPanel() {
-      const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      };
       const formatter = new Intl.DateTimeFormat("no-NO", options);
 
-       // Gjør første bokstav stor
-  const formatted = formatter.format(selectedDate);
-  eventDateTitle.textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
+      const formatted = formatter.format(selectedDate);
+      eventDateTitle.textContent =
+        formatted.charAt(0).toUpperCase() + formatted.slice(1);
 
       const events = loadEvents();
       const dateKey = formatDateKey(selectedDate);
@@ -1387,7 +1217,11 @@ const menuPanel = document.getElementById("menuPanel");
             eventsNow[dateKey] = arr;
           }
           saveEvents(eventsNow);
-          if (editingEvent && editingEvent.dateKey === dateKey && editingEvent.index === index) {
+          if (
+            editingEvent &&
+            editingEvent.dateKey === dateKey &&
+            editingEvent.index === index
+          ) {
             resetForm();
           }
           renderCalendar();
@@ -1404,7 +1238,6 @@ const menuPanel = document.getElementById("menuPanel");
       });
     }
 
-    // Påminnelse: beregn neste forventede mens
     function updateReminders() {
       if (!cycleSettings || !cycleSettings.lastStartDateKey) {
         reminderBanner.style.display = "none";
@@ -1427,12 +1260,15 @@ const menuPanel = document.getElementById("menuPanel");
       }
 
       const todayDate = new Date();
-      const todayMidnight = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
+      const todayMidnight = new Date(
+        todayDate.getFullYear(),
+        todayDate.getMonth(),
+        todayDate.getDate()
+      );
 
       let nextStart = new Date(startDate.getTime());
       const oneDayMs = 24 * 60 * 60 * 1000;
 
-      // Flytt fremover til neste start som er i dag eller fremover
       while (nextStart < todayMidnight) {
         nextStart = new Date(nextStart.getTime() + cycleLen * oneDayMs);
       }
@@ -1457,7 +1293,8 @@ const menuPanel = document.getElementById("menuPanel");
       }
 
       if (diffDays <= 3) {
-        reminderBanner.innerHTML = `<span class="reminder-strong">Påminnelse:</span> ${message}`;
+        reminderBanner.innerHTML =
+          `<span class="reminder-strong">Påminnelse:</span> ${message}`;
       } else {
         reminderBanner.textContent = message;
       }
@@ -1469,7 +1306,8 @@ const menuPanel = document.getElementById("menuPanel");
       periodLengthInput.value = cycleSettings.periodLength;
 
       if (cycleSettings.lastStartDateKey) {
-        cycleInfoText.textContent = `Startdag: ${cycleSettings.lastStartDateKey} • aktiv`;
+        cycleInfoText.textContent =
+          `Startdag: ${cycleSettings.lastStartDateKey} • aktiv`;
         clearCycleBtn.style.display = "inline-flex";
       } else {
         cycleInfoText.textContent = "Ingen syklus markert ennå.";
@@ -1478,10 +1316,21 @@ const menuPanel = document.getElementById("menuPanel");
 
       updateReminders();
     }
-// Åpne/lukk meny på mobil
-menuToggle.addEventListener("click", () => {
-  menuPanel.classList.toggle("open");
-});
+
+    // Hamburger: åpne/lukk på mobil
+    menuToggle.addEventListener("click", () => {
+      menuPanel.classList.toggle("open");
+    });
+
+    // På mobil: lukk menyen når man velger en knapp inne i den
+    menuPanel.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+          menuPanel.classList.remove("open");
+        }
+      });
+    });
+
     prevBtn.addEventListener("click", () => {
       if (viewMode === "month" || viewMode === "cycle") {
         currentMonth--;
@@ -1531,7 +1380,11 @@ menuToggle.addEventListener("click", () => {
     todayBtn.addEventListener("click", () => {
       currentYear = today.getFullYear();
       currentMonth = today.getMonth();
-      selectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      selectedDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
       resetForm();
       renderCalendar();
       renderEventPanel();
@@ -1602,7 +1455,6 @@ menuToggle.addEventListener("click", () => {
       resetForm();
     });
 
-    // Syklus-handlere
     cycleLengthInput.addEventListener("change", () => {
       let val = parseInt(cycleLengthInput.value, 10);
       if (isNaN(val)) val = 28;
@@ -1637,7 +1489,7 @@ menuToggle.addEventListener("click", () => {
       updateCycleUI();
       renderCalendar();
     });
- 
+
     // Init
     updateCycleUI();
     renderCalendar();
@@ -1645,3 +1497,4 @@ menuToggle.addEventListener("click", () => {
   </script>
 </body>
 </html>
+
