@@ -508,17 +508,24 @@
       height: 18px;
       filter: brightness(1.08) contrast(1.2) saturate(1.15);
     }
-.menu-overlay {
-  position: fixed;
-  inset: 0;                 /* top:0; right:0; bottom:0; left:0; */
-  background: rgba(255, 255, 255, 0.75); /* hvit, halvtransparent */
-  z-index: 15;
-  display: none;
-}
 
-.menu-overlay.open {
-  display: block;
-}
+    /* OVERLAY BAK MENY (med fade) */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease-out;
+      z-index: 10;
+    }
+
+    .menu-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     /* ---------- MOBIL (≤ 768px) ---------- */
 
     @media (max-width: 768px) {
@@ -548,76 +555,57 @@
         width: 100%;
       }
 
-  /* Hamburger vises på mobil */
-  .menu-toggle {
-    display: inline-flex;
-  }
+      /* Hamburger vises på mobil */
+      .menu-toggle {
+        display: inline-flex;
+      }
 
-  /* Header må være relativ for at panelet skal kunne "henge under" */
-  .header-controls {
-    position: relative;
-    width: 100%;
-    justify-content: flex-start;
-  }
-/* Meny-panel m/ animasjon */
-.menu-panel {
-  /* grunnstil */
-  width: 100%;
-  margin-top: 8px;
+      /* Header må være relativ for at panelet skal kunne "henge under" */
+      .header-controls {
+        position: relative;
+        width: 100%;
+        justify-content: flex-start;
+      }
 
-  /* skjult som standard */
-  display: none;
-  opacity: 0;
-  transform: translateY(-8px);
-  pointer-events: none;
+      /* Meny-panel m/ animasjon */
+      .menu-panel {
+        width: 100%;
+        margin-top: 8px;
 
-  /* smooth fade/slide */
-  transition:
-    opacity 0.22s ease-out,
-    transform 0.22s ease-out;
-  z-index: 20;          /* over overlayen */
-}
+        display: none;
+        opacity: 0;
+        transform: translateY(-8px);
+        pointer-events: none;
 
-.menu-panel.open {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
+        transition:
+          opacity 0.22s ease-out,
+          transform 0.22s ease-out;
+        z-index: 20; /* over overlayen */
+      }
 
-/* 🔽 OVERLAYEN – EGEN BLOKK, IKKE INNI .menu-panel.open */
-.menu-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.22s ease-out;
-  z-index: 10; /* under menyen */
-}
+      .menu-panel.open {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
 
-.menu-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
+      /* Innholdet i panelet – en kolonne med valg */
+      .view-toggle,
+      .nav-buttons {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
 
-  /* Innholdet i panelet – en kolonne med valg */
-  .view-toggle,
-  .nav-buttons {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .view-toggle button,
-  .nav-buttons button {
-    width: 100%;
-    justify-content: flex-start; /* tekst venstre-justert inni knappen */
-  }
+      .view-toggle button,
+      .nav-buttons button {
+        width: 100%;
+        justify-content: flex-start;
+      }
 
       .calendar-grid {
         padding: 6px;
@@ -691,14 +679,14 @@
   </style>
 </head>
 <body>
-  <div class="menu-overlay" id="menuOverlay"></div> 
+  <div class="menu-overlay" id="menuOverlay"></div>
+
   <div class="app">
     <div>
       <div class="calendar-header">
         <div class="month-label" id="monthLabel"></div>
 
         <div class="header-controls">
-          <!-- KUN hamburgermeny + panel her -->
           <button class="menu-toggle" id="menuToggle">☰</button>
 
           <div class="menu-panel" id="menuPanel">
@@ -798,6 +786,7 @@
     // Hamburger-meny
     const menuToggle = document.getElementById("menuToggle");
     const menuPanel = document.getElementById("menuPanel");
+    const menuOverlay = document.getElementById("menuOverlay");
 
     // Syklus-elementer
     const cycleLengthInput = document.getElementById("cycleLengthInput");
@@ -1369,51 +1358,38 @@
       updateReminders();
     }
 
-const menuOverlay = document.getElementById("menuOverlay");
+    // ------- MOBILMENY: ÅPNE/LUKK + OVERLAY -------
 
-// Funksjon for å lukke menyen på mobil
-function closeMenuOnMobile() {
-  if (window.innerWidth <= 768) {
-    menuPanel.classList.remove("open");
-    menuOverlay.classList.remove("open");
-  }
-}
+    function closeMenuOnMobile() {
+      if (window.innerWidth <= 768) {
+        menuPanel.classList.remove("open");
+        menuOverlay.classList.remove("open");
+      }
+    }
 
-// Hamburger: åpne/lukk meny
-menuToggle.addEventListener("click", () => {
-  const isOpen = menuPanel.classList.toggle("open");
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuPanel.classList.toggle("open");
+      if (isOpen) {
+        menuOverlay.classList.add("open");
+      } else {
+        menuOverlay.classList.remove("open");
+      }
+    });
 
-  if (isOpen) {
-    menuOverlay.classList.add("open");
-  } else {
-    menuOverlay.classList.remove("open");
-  }
-});
-    menuOverlay.addEventListener("click", () => { 
-  closeMenuOnMobile();
-});
+    // Klikk utenfor meny → lukk
+    menuOverlay.addEventListener("click", () => {
+      closeMenuOnMobile();
+    });
 
-// Klikk utenfor meny → lukk
-menuOverlay.addEventListener("click", () => {
-  closeMenuOnMobile();
-});
+    // Lukk meny når man trykker på en knapp i menyen
+    menuPanel.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        closeMenuOnMobile();
+      });
+    });
 
-// Lukk meny når man trykker på en knapp i menyen
-menuPanel.querySelectorAll("button").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    closeMenuOnMobile();
-  });
-});
-monthViewBtn.addEventListener("click", () => {
-  viewMode = "month";
-  monthViewBtn.classList.add("active");
-  weekViewBtn.classList.remove("active");
-  cycleViewBtn.classList.remove("active");
-  currentYear = selectedDate.getFullYear();
-  currentMonth = selectedDate.getMonth();
-  renderCalendar();
-  closeMenuOnMobile();  // ✔ JA, dette skal stå her
-});
+    // ------- NAVIGASJON OG VISNINGSKNAPPER -------
+
     prevBtn.addEventListener("click", () => {
       if (viewMode === "month" || viewMode === "cycle") {
         currentMonth--;
@@ -1435,6 +1411,7 @@ monthViewBtn.addEventListener("click", () => {
       resetForm();
       renderEventPanel();
       updateReminders();
+      closeMenuOnMobile();
     });
 
     nextBtn.addEventListener("click", () => {
@@ -1458,6 +1435,7 @@ monthViewBtn.addEventListener("click", () => {
       resetForm();
       renderEventPanel();
       updateReminders();
+      closeMenuOnMobile();
     });
 
     todayBtn.addEventListener("click", () => {
@@ -1472,6 +1450,7 @@ monthViewBtn.addEventListener("click", () => {
       renderCalendar();
       renderEventPanel();
       updateReminders();
+      closeMenuOnMobile();
     });
 
     monthViewBtn.addEventListener("click", () => {
@@ -1482,6 +1461,7 @@ monthViewBtn.addEventListener("click", () => {
       currentYear = selectedDate.getFullYear();
       currentMonth = selectedDate.getMonth();
       renderCalendar();
+      closeMenuOnMobile();
     });
 
     weekViewBtn.addEventListener("click", () => {
@@ -1490,6 +1470,7 @@ monthViewBtn.addEventListener("click", () => {
       monthViewBtn.classList.remove("active");
       cycleViewBtn.classList.remove("active");
       renderCalendar();
+      closeMenuOnMobile();
     });
 
     cycleViewBtn.addEventListener("click", () => {
@@ -1500,7 +1481,10 @@ monthViewBtn.addEventListener("click", () => {
       currentYear = selectedDate.getFullYear();
       currentMonth = selectedDate.getMonth();
       renderCalendar();
+      closeMenuOnMobile();
     });
+
+    // ------- HENDELSER & SYKLUS -------
 
     eventForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -1580,4 +1564,3 @@ monthViewBtn.addEventListener("click", () => {
   </script>
 </body>
 </html>
-
