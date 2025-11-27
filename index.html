@@ -137,6 +137,57 @@
     padding: 12px 10px 14px;
     gap: 10px;
   }
+   /* ----- MOBIL HAMBURGER-MENY ----- */
+
+  .header-controls {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    align-self: flex-end;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #efefef;
+    border: none;
+    font-size: 1rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+
+  .menu-toggle:active {
+    transform: scale(0.95);
+  }
+
+  /* Lukkede paneler */
+  .menu-panel {
+    display: none;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  /* Åpne paneler */
+  .menu-panel.open {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Knappene inni menyen */
+  .view-toggle, .nav-buttons {
+    width: 100%;
+    display: flex;
+    gap: 6px;
+  }
+
+  .view-toggle button,
+  .nav-buttons button {
+    flex: 1;
+  }
 
   .event-date-title {
     font-size: 1.05rem;
@@ -710,23 +761,30 @@ button:active {
 
   <div class="app">
     <div>
-      <div class="calendar-header">
-        <div class="month-label" id="monthLabel"></div>
+<div class="calendar-header">
+  <div class="month-label" id="monthLabel"></div>
 
-        <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-end;">
-          <div class="view-toggle">
-            <button id="monthViewBtn" class="btn-toggle active">Måned</button>
-            <button id="weekViewBtn" class="btn-toggle">Uke</button>
-            <button id="cycleViewBtn" class="btn-toggle">Syklus</button>
-          </div>
-          <div class="nav-buttons">
-            <button id="prevBtn">&#8592; Forrige</button>
-            <button id="todayBtn">I dag</button>
-            <button id="nextBtn">Neste &#8594;</button>
-          </div>
-        </div>
+  <div class="header-controls">
+    <!-- Hamburger-knapp (vises bare på mobil) -->
+    <button id="menuToggle" class="menu-toggle" aria-expanded="false">
+      ☰ Meny
+    </button>
+
+    <!-- Panelet som inneholder de vanlige knappene -->
+    <div class="menu-panel" id="menuPanel">
+      <div class="view-toggle">
+        <button id="monthViewBtn" class="btn-toggle active">Måned</button>
+        <button id="weekViewBtn" class="btn-toggle">Uke</button>
+        <button id="cycleViewBtn" class="btn-toggle">Syklus</button>
       </div>
-
+      <div class="nav-buttons">
+        <button id="prevBtn">&#8592; Forrige</button>
+        <button id="todayBtn">I dag</button>
+        <button id="nextBtn">Neste &#8594;</button>
+      </div>
+    </div>
+  </div>
+</div>
       <div class="calendar-grid" id="calendarGrid">
         <!-- Genereres i JS -->
       </div>
