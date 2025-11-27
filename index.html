@@ -169,13 +169,22 @@
     }
 
     .day-name {
-      text-align: center;
-      font-weight: 400;
-      color: #000000;
-      padding: 4px 0;
-      font-size: 0.75rem;
-    }
+  text-align: center;
+  font-weight: 400;
+  color: #000000;
+  padding: 4px 0;
+  font-size: 0.75rem;
+}
 
+/* Ukevisning – både ukedag og dato i svart */
+.day-name > div:first-child {
+  color: #000 !important;
+  font-weight: 500;      /* litt fetere, valgfritt */
+}
+
+.day-name .day-label-small {
+  color: #000 !important;
+}
     .day-cell {
       height: 64px;
       background: white;
